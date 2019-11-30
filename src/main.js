@@ -3,6 +3,10 @@ import App from '@/App.vue'
 import router from '@/router'
 import store from '@/store'
 
+// 配置 REM 适配
+import 'postcss-pxtorem'
+import 'amfe-flexible'
+
 // 安需引入vant组件
 import '@/utils/register-vant'
 
