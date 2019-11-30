@@ -41,7 +41,14 @@ export default {
   methods: {
     //  发送登入请求，获取token
     async onSubmit () {
+      // 轻提示
+      this.$toast.loading({
+        duration: 0,
+        message: '加载中...',
+        forbidClick: true
+      })
       const res = await login(this.user)
+      this.$toast.success('成功文案')
       console.log(res)
     }
   }
