@@ -13,9 +13,6 @@ import '@/utils/register-vant'
 // 自定义vant组件样式
 import '@/style/index.less'
 
-// 引入自定义请求配置
-import '@/utils/request'
-
 Vue.config.productionTip = false
 
 new Vue({

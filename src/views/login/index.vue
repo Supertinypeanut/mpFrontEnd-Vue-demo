@@ -5,14 +5,14 @@
   <!-- 账号密码输入框 -->
   <van-cell-group>
     <van-field
-      v-model="user.username"
+      v-model="user.mobile"
       required
       clearable
       label="用户名"
       placeholder="请输入用户名"
     />
     <van-field
-      v-model="user.password"
+      v-model="user.code"
       type="password"
       label="密码"
       placeholder="请输入密码"
@@ -21,20 +21,28 @@
   </van-cell-group>
   <!-- 登入按钮 -->
   <div class="btn">
-    <van-button type="info">确定</van-button>
+    <van-button @click="onSubmit" type="info">确定</van-button>
   </div>
 
   </div>
 </template>
 
 <script>
+import { login } from '@/api/login-request'
 export default {
   data () {
     return {
       user: {
-        username: '',
-        password: ''
+        mobile: '13911111111',
+        code: '246810'
       }
+    }
+  },
+  methods: {
+    //  发送登入请求，获取token
+    async onSubmit () {
+      const res = await login(this.user)
+      console.log(res)
     }
   }
 }
