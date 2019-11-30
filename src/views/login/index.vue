@@ -1,19 +1,53 @@
 <template>
   <div class="login">
-<van-button type="default">默认按钮</van-button>
-<van-button type="primary">主要按钮</van-button>
-<van-button type="info">信息按钮</van-button>
-<van-button type="warning">警告按钮</van-button>
-<van-button type="danger">危险按钮</van-button>
+  <!-- 顶部nav -->
+  <van-nav-bar title="登入"/>
+  <!-- 账号密码输入框 -->
+  <van-cell-group>
+    <van-field
+      v-model="user.username"
+      required
+      clearable
+      label="用户名"
+      placeholder="请输入用户名"
+    />
+    <van-field
+      v-model="user.password"
+      type="password"
+      label="密码"
+      placeholder="请输入密码"
+      required
+    />
+  </van-cell-group>
+  <!-- 登入按钮 -->
+  <div class="btn">
+    <van-button type="info">确定</van-button>
+  </div>
+
   </div>
 </template>
 
 <script>
 export default {
-
+  data () {
+    return {
+      user: {
+        username: '',
+        password: ''
+      }
+    }
+  }
 }
 </script>
 
-<style>
+<style scoped lang="less">
+.login{
+  .btn{
+    padding: 20px;
+    .van-button{
+      width: 100%;
+    }
+  }
 
+}
 </style>
