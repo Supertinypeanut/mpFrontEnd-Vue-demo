@@ -29,9 +29,9 @@
 
 <script>
 import { login } from '@/api/login-request'
-import { setItem } from '@/utils/storage'
 
 export default {
+  name: 'Login',
   data () {
     return {
       user: {
@@ -53,10 +53,8 @@ export default {
       try {
         const res = await login(this.user)
         this.$toast.success('登入成功')
-        // 本地存储
-        setItem('token', res.data.data)
         // 更新容器内token
-        this.$store.commit('updateUserToken')
+        this.$store.commit('updateUserToken', res.data.data)
         // 跳转到主页
         this.$router.push('/')
       } catch (error) {

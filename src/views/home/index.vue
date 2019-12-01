@@ -1,6 +1,8 @@
 <template>
   <div class="home">
+      <!-- 子路由出口 -->
     <router-view />
+    <!-- Tabbar 标签栏 -->
     <van-tabbar v-model="active">
       <van-tabbar-item icon="home-o">标签</van-tabbar-item>
       <van-tabbar-item icon="search">标签</van-tabbar-item>
@@ -12,6 +14,7 @@
 
 <script>
 export default {
+  name: 'Home',
   data () {
     return {
       active: 0

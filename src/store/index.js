@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import { getItem } from '@/utils/storage'
+import { getItem, setItem } from '@/utils/storage'
 
 Vue.use(Vuex)
 
@@ -12,8 +12,10 @@ export default new Vuex.Store({
   },
   mutations: {
     // 更新token
-    updateUserToken (state) {
-      state.userToken = getItem('token')
+    updateUserToken (state, data) {
+      state.userToken = data
+      // 本地存储
+      setItem('token', data)
     }
   },
   actions: {
