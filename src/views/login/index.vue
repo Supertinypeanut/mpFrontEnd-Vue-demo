@@ -47,9 +47,13 @@ export default {
         message: '加载中...',
         forbidClick: true
       })
-      const res = await login(this.user)
-      this.$toast.success('成功文案')
-      console.log(res)
+      try {
+        const res = await login(this.user)
+        this.$toast.success('登入成功')
+        console.log(res)
+      } catch (error) {
+        this.$toast.fail('登入失败')
+      }
     }
   }
 }
