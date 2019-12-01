@@ -29,6 +29,8 @@
 
 <script>
 import { login } from '@/api/login-request'
+import { setItem } from '@/utils/storage'
+
 export default {
   data () {
     return {
@@ -50,7 +52,8 @@ export default {
       try {
         const res = await login(this.user)
         this.$toast.success('登入成功')
-        console.log(res)
+        // console.log(res)
+        setItem('token', res)
       } catch (error) {
         this.$toast.fail('登入失败')
       }
