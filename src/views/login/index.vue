@@ -49,11 +49,16 @@ export default {
         message: '加载中...',
         forbidClick: true
       })
+      // 捕获请求失败
       try {
         const res = await login(this.user)
         this.$toast.success('登入成功')
-        // console.log(res)
-        setItem('token', res)
+        // 本地存储
+        setItem('token', res.data.data)
+        // 更新容器内token
+        this.$store.commit('updateUserToken')
+        // 跳转到主页
+        this.$router.push('/')
       } catch (error) {
         this.$toast.fail('登入失败')
       }
