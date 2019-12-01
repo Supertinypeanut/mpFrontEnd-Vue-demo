@@ -9,7 +9,9 @@ import {
   TabbarItem,
   PullRefresh,
   List,
-  Cell
+  Cell,
+  Tab,
+  Tabs
 } from 'vant'
 Vue
   .use(NavBar)
@@ -22,3 +24,5 @@ Vue
   .use(PullRefresh)
   .use(List)
   .use(Cell)
+  .use(Tab)
+  .use(Tabs)
