@@ -8,7 +8,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     // 初始化token数据
-    userToken: getItem('token')
+    userToken: getItem('token') || {}
   },
   mutations: {
     // 更新token

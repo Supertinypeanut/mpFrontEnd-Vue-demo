@@ -13,7 +13,7 @@
           <!-- 列表 -->
           <van-list
             v-model="channel.loading"
-            :finished="channels.finished"
+            :finished="channel.finished"
             finished-text="没有更多了"
             @load="onLoad"
           >
@@ -60,16 +60,16 @@ export default {
     // 获取频道列表
     async getChannels () {
       const response = await channels()
-      this.channels = response.data.data.channels
-
+      const channelsArr = response.data.data.channels
       // 初始化频道各自的私有数据
-      this.channels.forEach(channel => {
-        channel.timestamp = undefined // 是否还有可加载数据
+      channelsArr.forEach(channel => {
+        channel.timestamp = null // 是否还有可加载数据
         channel.loading = false // 上拉刷新
         channel.finished = false // 是否加载完毕
         channel.isLoading = false // 下拉刷新
         channel.articles = []
       })
+      this.channels = channelsArr
     },
 
     // 获取频道推荐
@@ -82,7 +82,7 @@ export default {
         timestamp: channel.timestamp || Date.now(),
         with_top: 1
       })
-      console.log(response)
+      console.log(response.data.data.results)
       // 是否有还需加载
       channel.timestamp = response.data.data.pre_timestamp
       // 文章列表
@@ -90,7 +90,7 @@ export default {
       // 关闭上拉加载
       channel.loading = false
       // 判断是否结束加载
-      channel.timestamp ? channel.finished = true : channel.finished = false
+      channel.timestamp ? channel.finished = false : channel.finished = true
     }
   }
 }
