@@ -20,7 +20,6 @@ request.interceptors.request.use(config => {
 
 // 转化响应内容
 request.defaults.transformResponse = [(response) => {
-  console.log(response)
   // 处理响应数据id过大，使用json-bigint处理
   try {
     return JSONBig.parse(response)

@@ -5,6 +5,10 @@ import request from '@/utils/request'
 export const channels = () =>
   request.get('/app/v1_0/user/channels')
 
+// 所有频道列表
+export const allChannels = () =>
+  request.get('/app/v1_0/channels')
+
 // 频道新闻推荐
 export const articles = (data) =>
   request.get('/app/v1_1/articles', { params: data })

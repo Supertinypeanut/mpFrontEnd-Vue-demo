@@ -77,6 +77,7 @@
       close-icon-position="top-left"
       round
       :style="{ height: '90%' }"
+      @open="onChannelOpen"
     >
       <van-cell>
         <!-- 使用 title 插槽来自定义标题 -->
@@ -89,7 +90,7 @@
         <van-grid-item
           v-for="channel in channels"
           :key="channel.id"
-          icon="close"
+          icon="clear"
           :text="channel.name"
         />
       </van-grid>
@@ -101,9 +102,9 @@
       </van-cell>
       <van-grid :gutter="10">
         <van-grid-item
-          v-for="channel in channels"
+          v-for="channel in otherChannels"
           :key="channel.id"
-          icon="close"
+          icon="clear"
           :text="channel.name"
         />
       </van-grid>
@@ -113,7 +114,7 @@
 
 <script>
 // 导入首页API
-import { channels, articles } from '@/api/home-request'
+import { channels, articles, allChannels } from '@/api/home-request'
 
 export default {
   name: 'Content',
@@ -122,7 +123,18 @@ export default {
     return {
       active: 0, // 当前频道索引
       channels: [], // 频道列表
-      isManage: false // 频道管理
+      isManage: false, // 频道管理
+      allChannels: [] // 所有频道
+    }
+  },
+
+  computed: {
+    // 其他频道
+    otherChannels () {
+      return this.allChannels.filter(allItem =>
+        this.channels.every(item =>
+          item.id !== allItem.id)
+      )
     }
   },
 
@@ -178,7 +190,6 @@ export default {
         timestamp: channel.timestamp || Date.now(),
         with_top: 1
       })
-      console.log(response.data.data.results)
       // 是否有还需加载
       channel.timestamp = response.data.data.pre_timestamp
       // 文章列表
@@ -187,6 +198,12 @@ export default {
       channel.loading = false
       // 判断是否结束加载
       channel.timestamp ? channel.finished = false : channel.finished = true
+    },
+
+    // 获取所有频道列表
+    async onChannelOpen () {
+      const response = await allChannels()
+      this.allChannels = response.data.data.channels
     }
   }
 }
