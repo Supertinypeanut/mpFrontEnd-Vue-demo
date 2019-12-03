@@ -7,7 +7,7 @@ import 'dayjs/locale/zh-cn'
 import relativeTime from 'dayjs/plugin/relativeTime'
 dayjs.extend(relativeTime)
 
-dayjs().from(dayjs('1990'))
+dayjs.locale('zh-cn')
 
 // 格式时间至今多久
 Vue.filter('relativeTime', time => dayjs().from(dayjs(time)))

@@ -61,7 +61,7 @@
                   评论:({{ article.comm_count}})
                 </van-col>
                 <van-col span="12">
-                  {{article.pubdate | relativeDate}}
+                  {{article.pubdate | relativeTime}}
                 </van-col>
               </van-row>
             </van-cell>
