@@ -51,7 +51,6 @@ export default {
       })
       // 捕获请求失败
       try {
-        console.log(11)
         const res = await login(this.user)
         this.$toast.success('登入成功')
         // 更新容器内token

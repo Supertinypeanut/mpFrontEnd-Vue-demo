@@ -11,7 +11,12 @@ import {
   List,
   Cell,
   Tab,
-  Tabs
+  Tabs,
+  Grid,
+  GridItem,
+  Image,
+  Loading,
+  Lazyload
 } from 'vant'
 Vue
   .use(NavBar)
@@ -26,3 +31,8 @@ Vue
   .use(Cell)
   .use(Tab)
   .use(Tabs)
+  .use(Grid)
+  .use(GridItem)
+  .use(Image)
+  .use(Loading)
+  .use(Lazyload)

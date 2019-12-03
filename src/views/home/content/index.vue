@@ -21,7 +21,18 @@
               v-for="article in channel.articles"
               :key="article.art_id.toString()"
               :title="article.title"
-            />
+            >
+            <!-- 图片预览 -->
+              <van-grid slot="label" :border="false" :column-num="3">
+                <van-grid-item v-for="(image,index) in article.cover.images" :key="index">
+                  <van-image :src="image" >
+                      <template v-slot:loading>
+                        <van-loading type="spinner" size="20" />
+                      </template>
+                  </van-image>
+                </van-grid-item>
+              </van-grid>
+            </van-cell>
           </van-list>
         </van-pull-refresh>
       </van-tab>
@@ -82,7 +93,7 @@ export default {
         channel.loading = false // 上拉刷新
         channel.finished = false // 是否加载完毕
         channel.isLoading = false // 下拉刷新
-        channel.articles = []
+        channel.articles = [] // 频道文章
       })
       this.channels = channelsArr
     },

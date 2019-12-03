@@ -9,17 +9,17 @@ const request = axios.create({
   baseURL: 'http://ttapi.research.itcast.cn/'
 })
 
-// 设置请求头
-request.defaults.headers.common['Authorization'] = `Bearer ${store.state.userToken.token}`
+// 设置请求头  只执行一次
+// request.defaults.headers.common['Authorization'] = `Bearer ${store.state.userToken.token}`
 
-request.interceptors.response.use((res) => {
-  console.log(res)
-  return res
+request.interceptors.request.use(config => {
+  // 设置token
+  config.headers.common['Authorization'] = `Bearer ${store.state.userToken.token}`
+  return config
 })
 
-// 响应拦截器
+// 转化响应内容
 request.defaults.transformResponse = [(response) => {
-  console.log(999)
   // 处理响应数据id过大，使用json-bigint处理
   try {
     return JSONBig.parse(response)
