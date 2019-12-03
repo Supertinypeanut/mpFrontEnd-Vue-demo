@@ -16,7 +16,10 @@ import {
   GridItem,
   Image,
   Loading,
-  Lazyload
+  Lazyload,
+  Row,
+  Col,
+  Tag
 } from 'vant'
 Vue
   .use(NavBar)
@@ -38,3 +41,6 @@ Vue
   .use(Lazyload, {
     lazyComponent: true
   })
+  .use(Row)
+  .use(Col)
+  .use(Tag)

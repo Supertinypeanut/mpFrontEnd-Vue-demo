@@ -10,6 +10,9 @@ import 'amfe-flexible'
 // 安需引入vant组件
 import '@/utils/register-vant'
 
+// 引入时间格式工具
+import '@/utils/formatDate'
+
 // 自定义vant组件样式
 import '@/style/index.less'
 

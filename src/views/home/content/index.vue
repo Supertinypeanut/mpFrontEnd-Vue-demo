@@ -8,8 +8,12 @@
         :key="channel.id"
         :title="channel.name"
       >
+      <!--  -->
       <!-- 下拉刷新 -->
-        <van-pull-refresh v-model="channel.isLoading" @refresh="onRefresh">
+        <van-pull-refresh
+          v-model="channel.isLoading"
+          @refresh="onRefresh"
+        >
           <!-- 列表 -->
           <van-list
             v-model="channel.loading"
@@ -17,14 +21,22 @@
             finished-text="没有更多了"
             @load="onLoad(channel)"
           >
+            <!-- 单元格 -->
             <van-cell
               v-for="article in channel.articles"
               :key="article.art_id.toString()"
               :title="article.title"
             >
             <!-- 图片预览 -->
-              <van-grid slot="label" :border="false" :column-num="3">
-                <van-grid-item v-for="(image,index) in article.cover.images" :key="index">
+              <van-grid
+                slot="label"
+                :border="false"
+                :column-num="3"
+              >
+                <van-grid-item
+                  v-for="(image,index) in article.cover.images"
+                  :key="index"
+                >
                   <lazy-component>
                     <van-image
                       lazy-load
@@ -37,6 +49,18 @@
                   </lazy-component>
                 </van-grid-item>
               </van-grid>
+              <!-- 标签 tag -->
+              <van-row slot="label" type="flex">
+                <van-col span="4" v-if="article.is_top">
+                  <van-tag round plain type="danger">已置顶</van-tag>
+                </van-col>
+                <van-col span="4">
+                  评论:({{ article.comm_count}})
+                </van-col>
+                <van-col span="12">
+                  {{article.pubdate | relativeDate}}
+                </van-col>
+              </van-row>
             </van-cell>
           </van-list>
         </van-pull-refresh>
@@ -126,13 +150,24 @@ export default {
 </script>
 
 <style scoped lang="less">
+// 顶部样式
 /deep/ .van-tabs__wrap{
   position: fixed;
     z-index: 2;
     width: 100%;
     top: 44px;
 }
+
+// 频道列表样式
 /deep/ .van-tabs__content{
   margin-top: 90px;
+}
+
+// tag标签样式
+/deep/ .van-row{
+  align-items: center;
+  .van-tag{
+    transform: scale(.7)
+  }
 }
 </style>
