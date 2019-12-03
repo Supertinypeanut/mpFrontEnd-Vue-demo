@@ -25,11 +25,16 @@
             <!-- 图片预览 -->
               <van-grid slot="label" :border="false" :column-num="3">
                 <van-grid-item v-for="(image,index) in article.cover.images" :key="index">
-                  <van-image :src="image" >
+                  <lazy-component>
+                    <van-image
+                      lazy-load
+                      :src="image"
+                    >
                       <template v-slot:loading>
                         <van-loading type="spinner" size="20" />
                       </template>
-                  </van-image>
+                    </van-image>
+                  </lazy-component>
                 </van-grid-item>
               </van-grid>
             </van-cell>
