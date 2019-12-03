@@ -84,15 +84,27 @@
         <template slot="title">
           <span class="custom-title">我的频道</span>
         </template>
-        <van-tag slot="right-icon" type="danger">编辑</van-tag>
+        <van-tag
+          slot="right-icon"
+          type="danger"
+          @click="editChannels = !editChannels "
+        >
+        编辑
+        </van-tag>
       </van-cell>
       <van-grid :gutter="10">
         <van-grid-item
           v-for="channel in channels"
           :key="channel.id"
-          icon="clear"
           :text="channel.name"
+        >
+        <van-icon
+          slot="icon"
+          name="clear"
+          v-show="editChannels"
+          @click="onClearChannel(channel)"
         />
+        </van-grid-item>
       </van-grid>
       <van-cell>
         <!-- 使用 title 插槽来自定义标题 -->
@@ -104,7 +116,6 @@
         <van-grid-item
           v-for="channel in otherChannels"
           :key="channel.id"
-          icon="clear"
           :text="channel.name"
         />
       </van-grid>
@@ -114,7 +125,7 @@
 
 <script>
 // 导入首页API
-import { channels, articles, allChannels } from '@/api/home-request'
+import { channels, articles, allChannels, deleteChannel } from '@/api/home-request'
 
 export default {
   name: 'Content',
@@ -124,7 +135,8 @@ export default {
       active: 0, // 当前频道索引
       channels: [], // 频道列表
       isManage: false, // 频道管理
-      allChannels: [] // 所有频道
+      allChannels: [], // 所有频道
+      editChannels: false // 我的频道清除按钮
     }
   },
 
@@ -204,6 +216,14 @@ export default {
     async onChannelOpen () {
       const response = await allChannels()
       this.allChannels = response.data.data.channels
+    },
+
+    // 移除我的频道
+    onClearChannel (channel) {
+      const channels = this.channels
+      channels.splice(channels.indexOf(channel), 1)
+      // 发送移除请求
+      deleteChannel(channels)
     }
   }
 }
@@ -243,5 +263,14 @@ export default {
 // 频道管理弹出层
 .van-popup{
   padding-top: 30px;
+  .van-grid{
+    padding-top: 10px;
+      /deep/ .van-grid-item__icon-wrapper{
+      position: absolute;
+      right: -2px;
+      top: -2px;
+      transform: scale(.7)
+    }
+  }
 }
 </style>

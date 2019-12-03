@@ -5,6 +5,10 @@ import request from '@/utils/request'
 export const channels = () =>
   request.get('/app/v1_0/user/channels')
 
+// 移除用户频道列表
+export const deleteChannel = channels =>
+  request.patch('/app/v1_0/user/channels', channels)
+
 // 所有频道列表
 export const allChannels = () =>
   request.get('/app/v1_0/channels')
