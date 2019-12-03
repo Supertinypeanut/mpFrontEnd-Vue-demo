@@ -6,8 +6,12 @@ export const channels = () =>
   request.get('/app/v1_0/user/channels')
 
 // 移除用户频道列表
-export const deleteChannel = channels =>
-  request.patch('/app/v1_0/user/channels', channels)
+export const deleteChannel = id =>
+  request.delete(`/app/v1_0/user/channels/${id}`)
+
+// 添加用户频道列表
+export const addChannel = channel =>
+  request.put(`/app/v1_0/user/channels/${channel.id}`, { seq: channel.id })
 
 // 所有频道列表
 export const allChannels = () =>

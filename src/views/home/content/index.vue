@@ -89,7 +89,7 @@
           type="danger"
           @click="editChannels = !editChannels "
         >
-        编辑
+        {{ editChannels ? '完成' : '编辑'}}
         </van-tag>
       </van-cell>
       <van-grid :gutter="10">
@@ -117,6 +117,7 @@
           v-for="channel in otherChannels"
           :key="channel.id"
           :text="channel.name"
+          @click="onAddChannel(channel)"
         />
       </van-grid>
     </van-popup>
@@ -125,7 +126,7 @@
 
 <script>
 // 导入首页API
-import { channels, articles, allChannels, deleteChannel } from '@/api/home-request'
+import { channels, articles, allChannels, deleteChannel, addChannel } from '@/api/home-request'
 
 export default {
   name: 'Content',
@@ -223,7 +224,15 @@ export default {
       const channels = this.channels
       channels.splice(channels.indexOf(channel), 1)
       // 发送移除请求
-      deleteChannel(channels)
+      deleteChannel(channel.id)
+    },
+
+    // 添加用户频道
+    onAddChannel (channel) {
+      console.log(channel)
+      this.channels.push(channel)
+      // 发送添加请求
+      addChannel(channel)
     }
   }
 }
