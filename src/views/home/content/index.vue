@@ -1,6 +1,6 @@
 <template>
   <div class="first">
-    <van-nav-bar title="首页"></van-nav-bar>
+    <van-nav-bar fixed title="首页"></van-nav-bar>
     <!-- tab标签页 -->
     <van-tabs v-model="active" animated>
       <van-tab
@@ -125,6 +125,14 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped lang="less">
+/deep/ .van-tabs__wrap{
+  position: fixed;
+    z-index: 2;
+    width: 100%;
+    top: 44px;
+}
+/deep/ .van-tabs__content{
+  margin-top: 90px;
+}
 </style>

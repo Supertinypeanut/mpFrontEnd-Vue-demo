@@ -35,4 +35,6 @@ Vue
   .use(GridItem)
   .use(Image)
   .use(Loading)
-  .use(Lazyload)
+  .use(Lazyload, {
+    lazyComponent: true
+  })
