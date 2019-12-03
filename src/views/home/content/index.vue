@@ -3,12 +3,15 @@
     <van-nav-bar fixed title="首页"></van-nav-bar>
     <!-- tab标签页 -->
     <van-tabs v-model="active" animated>
+      <!-- 标签页标签管理按钮 -->
+      <div slot="nav-right" class="nav-right">
+        <van-icon name="wap-nav" @click='isManage = !isManage' />
+      </div>
       <van-tab
         v-for="channel in channels"
         :key="channel.id"
         :title="channel.name"
       >
-      <!--  -->
       <!-- 下拉刷新 -->
         <van-pull-refresh
           v-model="channel.isLoading"
@@ -66,6 +69,45 @@
         </van-pull-refresh>
       </van-tab>
     </van-tabs>
+    <!-- 频道管理弹出层 -->
+    <van-popup
+      v-model="isManage"
+      position="bottom"
+      closeable
+      close-icon-position="top-left"
+      round
+      :style="{ height: '90%' }"
+    >
+      <van-cell>
+        <!-- 使用 title 插槽来自定义标题 -->
+        <template slot="title">
+          <span class="custom-title">我的频道</span>
+        </template>
+        <van-tag slot="right-icon" type="danger">编辑</van-tag>
+      </van-cell>
+      <van-grid :gutter="10">
+        <van-grid-item
+          v-for="channel in channels"
+          :key="channel.id"
+          icon="close"
+          :text="channel.name"
+        />
+      </van-grid>
+      <van-cell>
+        <!-- 使用 title 插槽来自定义标题 -->
+        <template slot="title">
+          <span class="custom-title">其他频道</span>
+        </template>
+      </van-cell>
+      <van-grid :gutter="10">
+        <van-grid-item
+          v-for="channel in channels"
+          :key="channel.id"
+          icon="close"
+          :text="channel.name"
+        />
+      </van-grid>
+    </van-popup>
   </div>
 </template>
 
@@ -79,7 +121,8 @@ export default {
   data () {
     return {
       active: 0, // 当前频道索引
-      channels: [] // 频道列表
+      channels: [], // 频道列表
+      isManage: false // 频道管理
     }
   },
 
@@ -169,5 +212,19 @@ export default {
   .van-tag{
     transform: scale(.7)
   }
+}
+
+// 频道管理按钮
+.nav-right{
+  position: sticky;
+  right: 0;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+}
+
+// 频道管理弹出层
+.van-popup{
+  padding-top: 30px;
 }
 </style>

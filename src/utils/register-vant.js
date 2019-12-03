@@ -19,7 +19,9 @@ import {
   Lazyload,
   Row,
   Col,
-  Tag
+  Tag,
+  Icon,
+  Popup
 } from 'vant'
 Vue
   .use(NavBar)
@@ -44,3 +46,5 @@ Vue
   .use(Row)
   .use(Col)
   .use(Tag)
+  .use(Icon)
+  .use(Popup)
