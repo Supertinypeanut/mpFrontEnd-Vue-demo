@@ -15,7 +15,7 @@
             v-model="channel.loading"
             :finished="channel.finished"
             finished-text="没有更多了"
-            @load="onLoad"
+            @load="onLoad(channel)"
           >
             <van-cell
               v-for="article in channel.articles"
@@ -50,11 +50,26 @@ export default {
 
   methods: {
     // 下拉刷新事件
-    onRefresh () {
-      setTimeout(() => {
-        this.$toast('刷新成功')
-        this.isLoading = false
-      }, 500)
+    async onRefresh () {
+      const channel = this.channels[this.active]
+      // 发送刷新请求
+      const response = await articles({
+        channel_id: channel.id,
+        timestamp: Date.now(),
+        with_top: 1
+      })
+
+      // 存储刷新返回数据
+      const articlesArr = response.data.data.results
+      channel.articles.unshift(...articlesArr)
+
+      // 提示用户信息
+      articlesArr.length
+        ? this.$toast(`更新了${articlesArr.length}条数据`)
+        : this.$toast('暂无最新数据')
+
+      // 关闭下拉刷新数据状态
+      channel.isLoading = false
     },
 
     // 获取频道列表
@@ -73,9 +88,7 @@ export default {
     },
 
     // 获取频道推荐
-    async onLoad () {
-      // 当前频道
-      const channel = this.channels[this.active]
+    async onLoad (channel) {
       // 发送频道推荐请求
       const response = await articles({
         channel_id: channel.id,

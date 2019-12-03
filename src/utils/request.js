@@ -12,8 +12,14 @@ const request = axios.create({
 // 设置请求头
 request.defaults.headers.common['Authorization'] = `Bearer ${store.state.userToken.token}`
 
+request.interceptors.response.use((res) => {
+  console.log(res)
+  return res
+})
+
 // 响应拦截器
 request.defaults.transformResponse = [(response) => {
+  console.log(999)
   // 处理响应数据id过大，使用json-bigint处理
   try {
     return JSONBig.parse(response)
