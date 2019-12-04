@@ -31,7 +31,7 @@
     <van-cell-group v-show="historiesShow">
       <van-cell style="color:#969799;" title="历史记录">
         <div v-show="isDeleteStatus">
-          <span>全部删除</span>&nbsp;&nbsp;
+          <span @click="historyMark = []">全部删除</span>&nbsp;&nbsp;
           <span @click="isDeleteStatus = false">完成</span>
         </div>
         <van-icon
@@ -41,7 +41,7 @@
         />
       </van-cell>
       <van-cell
-        v-for="mark in historyMark"
+        v-for="(mark,index) in historyMark"
         :title="mark"
         :key="mark"
       >
@@ -49,6 +49,7 @@
           name="close"
           v-show="isDeleteStatus"
           slot="right-icon"
+          @click="historyMark.splice(index,1)"
           >
         </van-icon>
       </van-cell>
@@ -57,7 +58,8 @@
 </template>
 
 <script>
-import { getSuggestion, getSearch } from '@/api/search-request'
+import { getSuggestion, getSearch, getHistories } from '@/api/search-request'
+import { setItem, getItem } from '@/utils/storage'
 
 export default {
   name: 'Search',
@@ -73,12 +75,20 @@ export default {
   },
 
   created () {
+    //   获取历史记录
+    this.histories()
+  },
 
+  watch: {
+    historyMark () {
+      //  要是历史记录有修改，便更新本地存储
+      setItem('historyMark', this.historyMark)
+    }
   },
 
   methods: {
+    // 获取下联想数组
     async onSuggestion (searchText) {
-      // 获取下联想数组
       this.historiesShow = false
       if (searchText.trim()) {
         // 发送请求
@@ -87,15 +97,15 @@ export default {
       }
     },
 
+    // 高亮联想关键词
     lightSuggestionKey (suggestionText) {
-      // 高亮联想关键词
       const reg = new RegExp(this.searchText, 'g') // 对应替换正则
       const str = `<span style="color:red;">${this.searchText}</span>` // 对应转换内容
       return suggestionText.replace(reg, str)
     },
 
+    // 关键词搜索,历史记录存储
     async onSearch (searchText) {
-      // 关键词搜索
       // 发送请求
       const response = await getSearch({
         page: 1,
@@ -111,7 +121,20 @@ export default {
       }
       historyMark.unshift(searchText)
       this.historyMark = historyMark
+      //   历史记录持久化
+      setItem('historyMark', historyMark)
       this.searchResults = response.data.data.results
+    },
+
+    // 获取用户历史记录
+    async histories () {
+      // 判断本地是否有历史记录
+      if (getItem('historyMark')) {
+        this.historyMark = getItem('historyMark')
+        return
+      }
+      const response = await getHistories()
+      this.historyMark = response.data.data.keywords
     }
   }
 }
