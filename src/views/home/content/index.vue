@@ -161,6 +161,11 @@ export default {
         setItem('channels', this.channels)
       },
       deep: true
+    },
+
+    // 监视频道管理弹出状态，只要关闭，清除频道按钮状态也应关闭
+    isManage () {
+      if (!this.isManage) this.editChannels = false
     }
   },
 
