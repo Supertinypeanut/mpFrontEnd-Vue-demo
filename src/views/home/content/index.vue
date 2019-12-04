@@ -94,14 +94,15 @@
       </van-cell>
       <van-grid :gutter="10">
         <van-grid-item
-          v-for="channel in channels"
+          v-for="(channel,index) in channels"
           :key="channel.id"
           :text="channel.name"
+          @click="onNotEditClick(index)"
         >
         <van-icon
           slot="icon"
           name="clear"
-          v-show="editChannels"
+          v-show="editChannels && channel !==channels[0]"
           @click="onClearChannel(channel)"
         />
         </van-grid-item>
@@ -154,7 +155,7 @@ export default {
   },
 
   watch: {
-    // 将我的频道列表持久化
+    // 将频道列表及文章持久化
     channels: {
       handler () {
         setItem('channels', this.channels)
@@ -192,7 +193,7 @@ export default {
       channel.isLoading = false
     },
 
-    // 获取频道列表
+    // 获取用户频道
     async getChannels () {
       let channelsArr = []
       // 查看本地是否有数据
@@ -214,7 +215,7 @@ export default {
       this.channels = channelsArr
     },
 
-    // 获取频道推荐
+    // 获取频道文章列表
     async onLoad (channel) {
       // 发送频道推荐请求
       const response = await articles({
@@ -232,7 +233,7 @@ export default {
       channel.timestamp ? channel.finished = false : channel.finished = true
     },
 
-    // 获取所有频道列表
+    // 获取所有频道
     async onChannelOpen () {
       const response = await allChannels()
       const isAllChannels = response.data.data.channels
@@ -260,6 +261,12 @@ export default {
       this.channels.push(channel)
       // 发送添加请求
       addChannel(channel)
+    },
+
+    // 非编辑状态下点击我的频道
+    onNotEditClick (index) {
+      this.active = index
+      this.isManage = false
     }
   }
 }
