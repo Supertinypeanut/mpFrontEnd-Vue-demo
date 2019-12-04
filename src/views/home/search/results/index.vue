@@ -16,10 +16,47 @@
       @load="onLoad"
     >
       <van-cell
-        v-for="item in list"
-        :key="item.art_id"
-        :title="item.title"
-      />
+        v-for="article in articles"
+        :key="article.art_id"
+        :title="article.title"
+      >
+       <!-- 图拍预览 -->
+       <van-grid
+         slot="label"
+         :border="false"
+         :column-num="3"
+       >
+          <van-grid-item
+            v-for="(image,index) in article.cover.images"
+            :key="index"
+          >
+            <lazy-component>
+              <van-image
+                lazy-load
+                :src="image"
+              >
+                <template v-slot:loading>
+                  <van-loading type="spinner" size="20" />
+                </template>
+              </van-image>
+            </lazy-component>
+          </van-grid-item>
+        </van-grid>
+        <van-row slot="label" type="flex" align="center">
+          <van-col span="4" v-if="article.is_top">
+            <van-tag round plain type="danger">已置顶</van-tag>
+          </van-col>
+          <van-col span="6">
+            {{article.aut_name}}
+          </van-col>
+          <van-col span="6">
+            评论:({{article.collect_count}})
+          </van-col>
+          <van-col span="6">
+            {{article.pubdate | relativeTime}}
+          </van-col>
+        </van-row>
+      </van-cell>
     </van-list>
   </div>
 </template>
@@ -31,9 +68,10 @@ export default {
   name: 'Search',
   data () {
     return {
-      list: [],
-      loading: false,
-      finished: false
+      articles: [], // 文章列表
+      loading: false, // 加载状态
+      finished: false, // 结束加载
+      page: 1 // 请求页数
     }
   },
 
@@ -47,33 +85,25 @@ export default {
     async onLoad () {
       // 发送请求
       const response = await getSearch({
-        page: 1,
+        page: this.page,
         per_page: 20,
         q: this.$route.params.q
       })
-      console.log(response)
-      this.list.push(...response.data.data.results)
+      const articles = response.data.data.results
+      this.articles.push(...articles)
+      console.log(articles)
+      // 加载状态结束
+      this.loading = false
 
-      //   将搜索结果存入Vuex容器中
-      this.$store.commit('keepSearchResults', response.data.data.results)
-      // 异步更新数据
-      setTimeout(() => {
-        for (let i = 0; i < 10; i++) {
-          this.list.push(this.list.length + 1)
-        }
-        // 加载状态结束
-        this.loading = false
-
-        // 数据全部加载完成
-        if (this.list.length >= 40) {
-          this.finished = true
-        }
-      }, 500)
+      // 数据是否全部加载完成
+      articles.length ? this.page++ : this.finished = true
     }
   }
 }
 </script>
 
-<style>
-
+<style lang="less" scoped>
+.van-list{
+    margin-top: 46px;
+}
 </style>

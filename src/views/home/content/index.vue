@@ -67,6 +67,9 @@
                 <van-col span="4" v-if="article.is_top">
                   <van-tag round plain type="danger">已置顶</van-tag>
                 </van-col>
+                <van-col span="6">
+                  {{article.aut_name}}
+                </van-col>
                 <van-col span="4">
                   评论:({{ article.comm_count}})
                 </van-col>
