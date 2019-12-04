@@ -8,10 +8,10 @@
         show-action
         shape="round"
         @focus="historiesShow = false"
-        @blur="historiesShow = true"
         @search="onSearch"
         @cancel="$router.back()"
         @input="onSuggestion"
+        @clear="historiesShow = true"
       />
     </form>
 
@@ -21,6 +21,7 @@
       icon="search"
       v-for="item in suggestion"
       :key="item"
+      @click="onSearch(item)"
       >
       <span slot="title" v-html="lightSuggestionKey(item)"></span>
       </van-cell>
@@ -29,25 +30,34 @@
     <!-- 历史记录 -->
     <van-cell-group v-show="historiesShow">
       <van-cell style="color:#969799;" title="历史记录">
-        <span>全部删除</span>&nbsp;&nbsp;
-        <span>完成</span>
-        <van-icon name="delete" />
+        <div v-show="isDeleteStatus">
+          <span>全部删除</span>&nbsp;&nbsp;
+          <span @click="isDeleteStatus = false">完成</span>
+        </div>
+        <van-icon
+          v-show="!isDeleteStatus"
+          name="delete"
+          @click="isDeleteStatus = true"
+        />
       </van-cell>
-      <van-cell title="记录" >
-        <van-icon name="close" slot="right-icon"></van-icon>
-      </van-cell>
-      <van-cell title="记录" >
-        <van-icon name="close" slot="right-icon"></van-icon>
-      </van-cell>
-      <van-cell title="记录" >
-        <van-icon name="close" slot="right-icon"></van-icon>
+      <van-cell
+        v-for="mark in historyMark"
+        :title="mark"
+        :key="mark"
+      >
+        <van-icon
+          name="close"
+          v-show="isDeleteStatus"
+          slot="right-icon"
+          >
+        </van-icon>
       </van-cell>
     </van-cell-group>
   </div>
 </template>
 
 <script>
-import { getSuggestion } from '@/api/search-request'
+import { getSuggestion, getSearch } from '@/api/search-request'
 
 export default {
   name: 'Search',
@@ -55,7 +65,10 @@ export default {
     return {
       searchText: '', // 输入内容
       historiesShow: true, // 历史记录是否显示
-      suggestion: [] // 下拉联想数组
+      suggestion: [], // 下拉联想数组
+      isDeleteStatus: false, // 历史记录是否是删除状态
+      historyMark: [], // 历史记录数组
+      searchResults: [] // 查询的数组
     }
   },
 
@@ -66,6 +79,7 @@ export default {
   methods: {
     async onSuggestion (searchText) {
       // 获取下联想数组
+      this.historiesShow = false
       if (searchText.trim()) {
         // 发送请求
         const response = await getSuggestion(searchText)
@@ -80,8 +94,24 @@ export default {
       return suggestionText.replace(reg, str)
     },
 
-    onSearch () {
-
+    async onSearch (searchText) {
+      // 关键词搜索
+      // 发送请求
+      const response = await getSearch({
+        page: 1,
+        per_page: 20,
+        q: searchText
+      })
+      //   当前历史记录数组
+      const historyMark = this.historyMark
+      // 防止历史记录重复，且最新搜索关键词排第一
+      if (historyMark.includes(searchText)) {
+        //   删除已存在的
+        historyMark.splice(historyMark.indexOf(searchText), 1)
+      }
+      historyMark.unshift(searchText)
+      this.historyMark = historyMark
+      this.searchResults = response.data.data.results
     }
   }
 }
