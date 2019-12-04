@@ -12,3 +12,7 @@ export const getSearch = params =>
 // 获取用户历史记录
 export const getHistories = () =>
   request.get('/app/v1_0/search/histories')
+
+// 删除历史记录
+export const deleteHistories = () =>
+  request.delete('/app/v1_0/search/histories')

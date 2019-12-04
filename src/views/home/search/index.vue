@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import { getSuggestion, getSearch, getHistories } from '@/api/search-request'
+import { getSuggestion, getSearch, getHistories, deleteHistories } from '@/api/search-request'
 import { setItem, getItem } from '@/utils/storage'
 
 export default {
@@ -83,6 +83,10 @@ export default {
     historyMark () {
       //  要是历史记录有修改，便更新本地存储
       setItem('historyMark', this.historyMark)
+      //   如果清空历史记录发送删除请求
+      if (!this.historyMark.length) {
+        deleteHistories()
+      }
     }
   },
 
