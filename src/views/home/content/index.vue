@@ -125,6 +125,8 @@
 </template>
 
 <script>
+// 导入本地存储API
+import { getItem, setItem } from '@/utils/storage'
 // 导入首页API
 import { channels, articles, allChannels, deleteChannel, addChannel } from '@/api/home-request'
 
@@ -148,6 +150,16 @@ export default {
         this.channels.every(item =>
           item.id !== allItem.id)
       )
+    }
+  },
+
+  watch: {
+    // 将我的频道列表持久化
+    channels: {
+      handler () {
+        setItem('channels', this.channels)
+      },
+      deep: true
     }
   },
 
@@ -182,16 +194,23 @@ export default {
 
     // 获取频道列表
     async getChannels () {
-      const response = await channels()
-      const channelsArr = response.data.data.channels
-      // 初始化频道各自的私有数据
-      channelsArr.forEach(channel => {
-        channel.timestamp = null // 是否还有可加载数据
-        channel.loading = false // 上拉刷新
-        channel.finished = false // 是否加载完毕
-        channel.isLoading = false // 下拉刷新
-        channel.articles = [] // 频道文章
-      })
+      let channelsArr = []
+      // 查看本地是否有数据
+      const localChannels = getItem('channels')
+      if (localChannels) {
+        channelsArr = localChannels
+      } else {
+        const response = await channels()
+        channelsArr = response.data.data.channels
+        // 初始化频道各自的私有数据
+        channelsArr.forEach(channel => {
+          channel.timestamp = null // 是否还有可加载数据
+          channel.loading = false // 上拉刷新
+          channel.finished = false // 是否加载完毕
+          channel.isLoading = false // 下拉刷新
+          channel.articles = [] // 频道文章
+        })
+      }
       this.channels = channelsArr
     },
 
@@ -216,7 +235,15 @@ export default {
     // 获取所有频道列表
     async onChannelOpen () {
       const response = await allChannels()
-      this.allChannels = response.data.data.channels
+      const isAllChannels = response.data.data.channels
+      isAllChannels.forEach(channel => {
+        channel.timestamp = null // 是否还有可加载数据
+        channel.loading = false // 上拉刷新
+        channel.finished = false // 是否加载完毕
+        channel.isLoading = false // 下拉刷新
+        channel.articles = [] // 频道文章
+      })
+      this.allChannels = isAllChannels
     },
 
     // 移除我的频道
@@ -250,6 +277,11 @@ export default {
 // 频道列表样式
 /deep/ .van-tabs__content{
   margin-top: 90px;
+}
+
+//  列表底部
+.van-list{
+  padding-bottom: 40px;
 }
 
 // tag标签样式
