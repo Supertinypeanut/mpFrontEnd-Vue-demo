@@ -1,6 +1,16 @@
 <template>
   <div class="first">
-    <van-nav-bar fixed title="首页"></van-nav-bar>
+    <van-nav-bar fixed>
+      <van-button
+        slot="title"
+        round
+        type="info"
+        size="small"
+        @click="$router.push('/search')"
+      >
+      搜索
+      </van-button>
+    </van-nav-bar>
     <!-- tab标签页 -->
     <van-tabs v-model="active" animated>
       <!-- 标签页标签管理按钮 -->
@@ -278,6 +288,12 @@ export default {
 </script>
 
 <style scoped lang="less">
+// 搜索按钮
+.van-button{
+  width: 100%;
+  background-color: #59abfe;
+}
+
 // 顶部样式
 /deep/ .van-tabs__wrap{
   position: fixed;

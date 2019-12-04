@@ -4,8 +4,8 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 const routes = [
-  // 首页
   {
+    // 首页
     path: '/',
     name: 'home',
     component: () => import('@/views/home'),
@@ -17,11 +17,17 @@ const routes = [
       }
     ]
   },
-  // 登入
   {
+    // 登入
     path: '/login',
     name: 'login',
     component: () => import('@/views/login')
+  },
+  {
+    // 搜索页
+    name: 'search',
+    path: '/search',
+    component: () => import('@/views/home/search')
   }
 ]
 

@@ -21,7 +21,8 @@ import {
   Col,
   Tag,
   Icon,
-  Popup
+  Popup,
+  Search
 } from 'vant'
 Vue
   .use(NavBar)
@@ -48,3 +49,4 @@ Vue
   .use(Tag)
   .use(Icon)
   .use(Popup)
+  .use(Search)
