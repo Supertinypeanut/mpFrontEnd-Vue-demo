@@ -44,6 +44,7 @@
         v-for="(mark,index) in historyMark"
         :title="mark"
         :key="mark"
+        @click="onSearch(mark)"
       >
         <van-icon
           name="close"
@@ -127,7 +128,8 @@ export default {
       this.historyMark = historyMark
       //   历史记录持久化
       setItem('historyMark', historyMark)
-      this.searchResults = response.data.data.results
+      //   将搜索结果存入Vuex容器中
+      this.$store.commit('keepSearchResults', response.data.data.results)
     },
 
     // 获取用户历史记录
