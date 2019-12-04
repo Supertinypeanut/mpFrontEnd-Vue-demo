@@ -6,28 +6,34 @@ Vue.use(VueRouter)
 const routes = [
   {
     // 首页
+    name: 'Home',
     path: '/',
-    name: 'home',
     component: () => import('@/views/home'),
     children: [
       {
+        name: 'First',
         path: '',
-        name: 'first',
         component: () => import('@/views/home/content')
       }
     ]
   },
   {
     // 登入
+    name: 'Login',
     path: '/login',
-    name: 'login',
     component: () => import('@/views/login')
   },
   {
     // 搜索页
-    name: 'search',
+    name: 'Search',
     path: '/search',
     component: () => import('@/views/home/search')
+  },
+  {
+    // 搜索结果页
+    name: 'Results',
+    path: '/search/:q',
+    component: () => import('@/views/home/search/results')
   }
 ]
 

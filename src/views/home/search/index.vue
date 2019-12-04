@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { getSuggestion, getSearch, getHistories, deleteHistories } from '@/api/search-request'
+import { getSuggestion, getHistories, deleteHistories } from '@/api/search-request'
 import { setItem, getItem } from '@/utils/storage'
 
 export default {
@@ -111,14 +111,9 @@ export default {
 
     // 关键词搜索,历史记录存储
     async onSearch (searchText) {
-      // 发送请求
-      const response = await getSearch({
-        page: 1,
-        per_page: 20,
-        q: searchText
-      })
       //   当前历史记录数组
       const historyMark = this.historyMark
+
       // 防止历史记录重复，且最新搜索关键词排第一
       if (historyMark.includes(searchText)) {
         //   删除已存在的
@@ -126,10 +121,12 @@ export default {
       }
       historyMark.unshift(searchText)
       this.historyMark = historyMark
+
       //   历史记录持久化
       setItem('historyMark', historyMark)
-      //   将搜索结果存入Vuex容器中
-      this.$store.commit('keepSearchResults', response.data.data.results)
+
+      // 跳转页面
+      this.$router.push(`/search/${searchText}`)
     },
 
     // 获取用户历史记录
