@@ -22,7 +22,8 @@ import {
   Tag,
   Icon,
   Popup,
-  Search
+  Search,
+  Skeleton
 } from 'vant'
 Vue
   .use(NavBar)
@@ -50,3 +51,4 @@ Vue
   .use(Icon)
   .use(Popup)
   .use(Search)
+  .use(Skeleton)
