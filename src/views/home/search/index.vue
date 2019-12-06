@@ -61,6 +61,8 @@
 <script>
 import { getSuggestion, getHistories, deleteHistories } from '@/api/search-request'
 import { setItem, getItem } from '@/utils/storage'
+// 引入防抖函数
+import { debounce } from 'loadsh'
 
 export default {
   name: 'Search',
@@ -93,19 +95,20 @@ export default {
 
   methods: {
     // 获取下联想数组
-    async onSuggestion (searchText) {
-      this.historiesShow = false
-      if (searchText.trim()) {
+    onSuggestion: debounce(
+      async function (searchText) {
+        this.historiesShow = false
+        if (searchText.trim()) {
         // 发送请求
-        const response = await getSuggestion(searchText)
-        this.suggestion = response.data.data.options
-      }
-    },
+          const response = await getSuggestion(searchText)
+          this.suggestion = response.data.data.options
+        }
+      }, 500),
 
     // 高亮联想关键词
     lightSuggestionKey (suggestionText) {
       const reg = new RegExp(this.searchText, 'g') // 对应替换正则
-      const str = `<span style="color:red;">${this.searchText}</span>` // 对应转换内容
+      const str = `<span style="color:#1989fa;">${this.searchText}</span>` // 对应转换内容
       return suggestionText.replace(reg, str)
     },
 
