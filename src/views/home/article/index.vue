@@ -10,7 +10,50 @@
      <van-icon slot="right" size="26" name="ellipsis" />
     </van-nav-bar>
     <!-- 标题 -->
-    <h5 v-text="article.title"></h5>
+    <van-cell class="title" :value="article.title" />
+    <!-- 用户信息 -->
+    <van-cell
+      :title="article.aut_name"
+      :label="article.pubdate | relativeTime"
+    >
+      <van-image
+        slot="icon"
+        width="1rem"
+        height="1rem"
+        round
+        fit="fill"
+        src="https://img.yzcdn.cn/vant/cat.jpeg"
+      />
+      <van-button slot="right-icon" size="small" round type="info">+关注</van-button>
+    </van-cell>
+    <!-- 内容 -->
+    <van-cell>
+      <p v-html="article.content"></p>
+    </van-cell>
+    <!-- 猜你喜欢 -->
+    <van-cell
+      style="font-weight:bolder"
+      value="猜你喜欢"
+      v-show="article.recomments"
+    />
+    <van-row>
+      <van-col
+        span="12"
+        v-for="(item,index) in article.recomments"
+        :key="index"
+        v-text="itme"
+      >
+      </van-col>
+    </van-row>
+    <!-- 不喜欢与点赞 -->
+    <van-row type="flex" justify="center">
+      <van-col span="5">
+        <van-button round size="small" hairline type="primary" plain icon="good-job-o">点赞</van-button>
+      </van-col>
+      <van-col span="5">
+        <van-button round size="small" hairline type="danger" plain icon="delete">不喜欢</van-button>
+      </van-col>
+    </van-row>
   </div>
 </template>
 
@@ -42,7 +85,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
-h5{
-  padding-top: 20px;
+.title{
+  padding-top: 60px;
+  font-weight: bolder;
+  font-size: 20px;
 }
 </style>
