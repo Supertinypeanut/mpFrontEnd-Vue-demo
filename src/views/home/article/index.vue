@@ -60,17 +60,42 @@
     <!-- 不喜欢与点赞 -->
     <van-row type="flex" justify="center">
       <van-col span="5">
-        <van-button round size="small" hairline type="primary" plain icon="good-job-o">点赞</van-button>
+        <van-button
+          round
+          size="small"
+          hairline
+          type="primary"
+          :plain="!(article.attitude == 1)"
+          icon="good-job-o"
+          @click="onToggleLikeArticle(article.art_id)"
+        >
+          {{ article.attitude == 1 ?'已点赞': '点赞' }}
+        </van-button>
       </van-col>
       <van-col span="5">
-        <van-button round size="small" hairline type="danger" plain icon="delete">不喜欢</van-button>
+        <van-button
+          round
+          size="small"
+          hairline
+          type="danger"
+          :plain="article.attitude !== 0"
+          icon="delete"
+        >
+          {{ article.attitude !== 0 ? '不喜欢':'取消不喜欢'  }}
+        </van-button>
       </van-col>
     </van-row>
   </div>
 </template>
 
 <script>
-import { articleInfo, followings, unFollowings } from '@/api/article-request'
+import {
+  articleInfo,
+  followings,
+  unFollowings,
+  likeArticle,
+  cancelLikeArticle
+} from '@/api/article-request'
 
 export default {
   name: 'Article',
@@ -100,6 +125,25 @@ export default {
       // 对不同状态下发送不同的关注请求
       ifFollowed ? await unFollowings(targetID) : await followings(targetID)
       this.article.is_followed = ifFollowed
+    },
+
+    // 点赞按钮
+    async onToggleLikeArticle (targetID) {
+      // 用户对文章的态度, -1: 无态度，0-不喜欢，1-点赞
+      let attitude = this.article.attitude
+
+      if (attitude !== 1) {
+        attitude = 1
+        //  发送点赞请求
+        await likeArticle(targetID)
+      } else {
+        attitude = 0
+        //  取消点赞请求
+        await cancelLikeArticle(targetID)
+      }
+
+      // 改变视图
+      this.article.attitude = attitude
     }
   }
 }
