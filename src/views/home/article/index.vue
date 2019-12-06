@@ -24,7 +24,16 @@
         fit="fill"
         src="https://img.yzcdn.cn/vant/cat.jpeg"
       />
-      <van-button slot="right-icon" size="small" round type="info">+关注</van-button>
+      <van-button
+        slot="right-icon"
+        size="small"
+        round
+        :plain="!article.is_followed"
+        type="info"
+        @click="onToggleFollow(article.aut_id)"
+      >
+        {{article.is_followed ? '已关注':'+关注' }}
+      </van-button>
     </van-cell>
     <!-- 内容 -->
     <van-cell>
@@ -44,6 +53,9 @@
         v-text="itme"
       >
       </van-col>
+      <van-row type="flex" justify="center">
+        <van-col></van-col>
+      </van-row>
     </van-row>
     <!-- 不喜欢与点赞 -->
     <van-row type="flex" justify="center">
@@ -58,7 +70,7 @@
 </template>
 
 <script>
-import { articleInfo } from '@/api/article-request'
+import { articleInfo, followings, unFollowings } from '@/api/article-request'
 
 export default {
   name: 'Article',
@@ -79,6 +91,15 @@ export default {
       const response = await articleInfo(this.$route.params.article_ID)
       console.log(response)
       this.article = response.data.data
+    },
+
+    // 关注按钮
+    async onToggleFollow (targetID) {
+      let ifFollowed = this.article.is_followed
+      ifFollowed = !ifFollowed
+      // 对不同状态下发送不同的关注请求
+      ifFollowed ? await unFollowings(targetID) : await followings(targetID)
+      this.article.is_followed = ifFollowed
     }
   }
 }
