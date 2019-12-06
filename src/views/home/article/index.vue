@@ -98,7 +98,8 @@
     <van-skeleton title :loading="loading" :row="9" />
     <van-skeleton title :loading="loading" :row="3" />
 
-    <!-- 加载失败显示提示 -->
+    <!-- 评论组件 -->
+    <article-comment></article-comment>
 
   </div>
 </template>
@@ -114,6 +115,7 @@ import {
   cancelDisLikeArticle
 } from '@/api/article-request'
 import { Dialog } from 'vant'
+import ArticleComment from './components/article-comment'
 
 export default {
   name: 'Article',
@@ -130,6 +132,9 @@ export default {
     this.loadData()
   },
 
+  components: {
+    ArticleComment
+  },
   methods: {
     // 获取文章详情与评论信息
     async loadData () {
@@ -214,5 +219,9 @@ export default {
 
 .van-skeleton{
   margin-top: 20px;
+}
+
+.van-image{
+  margin-right: 10px;
 }
 </style>
