@@ -19,6 +19,7 @@
         v-for="article in articles"
         :key="article.art_id"
         :title="article.title"
+        @click="$router.push({name:'Article',params:{article_ID:article.art_id}})"
       >
        <!-- 图拍预览 -->
        <van-grid

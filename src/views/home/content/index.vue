@@ -39,8 +39,9 @@
               v-for="article in channel.articles"
               :key="article.art_id.toString()"
               :title="article.title"
+              @click="$router.push({name:'Article',params:{article_ID:article.art_id}})"
             >
-            <!-- 图片预览 -->
+              <!-- 图片预览 -->
               <van-grid
                 slot="label"
                 :border="false"
