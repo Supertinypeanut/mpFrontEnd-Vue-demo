@@ -20,3 +20,11 @@ export const likeArticle = target =>
 // 取消对文章点赞
 export const cancelLikeArticle = target =>
   request.delete(`/app/v1_0/article/likings/${target}`)
+
+// 对文章不喜欢
+export const disLikeArticle = target =>
+  request.post(`/app/v1_0/article/dislikes`, { target })
+
+// 取消对文章不喜欢
+export const cancelDisLikeArticle = target =>
+  request.delete(`/app/v1_0/article/dislikes/${target}`)

@@ -80,8 +80,9 @@
           type="danger"
           :plain="article.attitude !== 0"
           icon="delete"
+          @click="onToggleDisLikeArticle(article.art_id)"
         >
-          {{ article.attitude !== 0 ? '不喜欢':'取消不喜欢'  }}
+          {{ article.attitude == 0 ? '取消' :'不喜欢' }}
         </van-button>
       </van-col>
     </van-row>
@@ -94,7 +95,9 @@ import {
   followings,
   unFollowings,
   likeArticle,
-  cancelLikeArticle
+  cancelLikeArticle,
+  disLikeArticle,
+  cancelDisLikeArticle
 } from '@/api/article-request'
 
 export default {
@@ -137,9 +140,29 @@ export default {
         //  发送点赞请求
         await likeArticle(targetID)
       } else {
-        attitude = 0
+        attitude = -1
         //  取消点赞请求
         await cancelLikeArticle(targetID)
+      }
+
+      // 改变视图
+      this.article.attitude = attitude
+    },
+
+    // 不喜欢按钮
+    async onToggleDisLikeArticle (targetID) {
+      console.log(8888)
+      // 用户对文章的态度, -1: 无态度，0-不喜欢，1-点赞
+      let attitude = this.article.attitude
+
+      if (attitude !== 0) {
+        attitude = 0
+        //  发送不喜欢请求
+        await disLikeArticle(targetID)
+      } else {
+        attitude = -1
+        //  取消不喜欢请求
+        await cancelDisLikeArticle(targetID)
       }
 
       // 改变视图
