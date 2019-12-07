@@ -3,11 +3,11 @@
       <!-- 子路由出口 -->
     <router-view />
     <!-- Tabbar 标签栏 -->
-    <van-tabbar v-model="active">
-      <van-tabbar-item icon="home-o">标签</van-tabbar-item>
-      <van-tabbar-item icon="search">标签</van-tabbar-item>
-      <van-tabbar-item icon="friends-o">标签</van-tabbar-item>
-      <van-tabbar-item icon="setting-o">标签</van-tabbar-item>
+    <van-tabbar v-model="active" route>
+      <van-tabbar-item replace to="/" icon="home-o">首页</van-tabbar-item>
+      <van-tabbar-item replace to="/chat" icon="chat-o">问答</van-tabbar-item>
+      <van-tabbar-item replace to="/video" icon="video-o">视频</van-tabbar-item>
+      <van-tabbar-item replace to="/user" icon="user-o">我的</van-tabbar-item>
     </van-tabbar>
   </div>
 </template>
