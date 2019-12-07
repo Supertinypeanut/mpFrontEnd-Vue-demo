@@ -91,16 +91,15 @@
           </van-button>
         </van-col>
       </van-row>
+
+      <!-- 评论组件 -->
+      <article-comment></article-comment>
     </van-skeleton>
 
     <!-- 填充屏幕骨架屏 -->
     <van-skeleton title :loading="loading" avatar :row="2" />
     <van-skeleton title :loading="loading" :row="9" />
     <van-skeleton title :loading="loading" :row="3" />
-
-    <!-- 评论组件 -->
-    <article-comment></article-comment>
-
   </div>
 </template>
 
@@ -141,7 +140,6 @@ export default {
       // 捕获页面数据请求失败异常
       try {
         const response = await articleInfo(this.$route.params.article_ID)
-        console.log(response)
         this.article = response.data.data
 
         // 关闭骨架屏

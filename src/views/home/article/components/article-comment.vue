@@ -8,9 +8,8 @@
       @load="onLoad"
     >
       <van-cell
-        v-for="item in list"
-        :key="item"
-        :title="item"
+        v-for="comment in comments"
+        :key="comment.com_id.toString()"
       >
         <van-image
           slot="icon"
@@ -20,15 +19,18 @@
           style="margin-right: 10px;"
           src="https://img.yzcdn.cn/vant/cat.jpeg"
         />
-        <span style="color: #466b9d;" slot="title">hello</span>
+        <span style="color: #466b9d;" slot="title">{{comment.aut_name}}</span>
         <div slot="label">
-          <p style="color: #363636;">我出去跟别人说我的是。。。</p>
+          <p style="color: #363636;">{{comment.content}}</p>
           <p>
-            <span style="margin-right: 10px;">3天前</span>
+            <span style="margin-right: 10px;">{{comment.pubdate | relativeTime}}</span>
             <van-button size="mini" type="default">回复</van-button>
           </p>
         </div>
-        <van-icon slot="right-icon" name="like-o" />
+        <van-icon
+          slot="right-icon"
+          :name="comment.is_liking ? 'like' : 'like-o'"
+        />
       </van-cell>
     </van-list>
     <!-- 评论列表 -->
@@ -45,32 +47,40 @@
 </template>
 
 <script>
+import { comments } from '@/api/article-comment-request'
+
 export default {
   name: 'ArticleComment',
   props: {},
   data () {
     return {
-      list: [], // 评论列表
+      comments: [], // 评论列表
       loading: false, // 上拉加载更多的 loading
-      finished: false // 是否加载结束
+      finished: false, // 是否加载结束
+      lastId: undefined // 本次返回结果的最后一个评论id，作为请求下一页数据的offset参数，若本次无具体数据，则值为NULL
     }
   },
 
-  methods: {
-    onLoad () {
-      // 异步更新数据
-      setTimeout(() => {
-        for (let i = 0; i < 10; i++) {
-          this.list.push(this.list.length + 1)
-        }
-        // 加载状态结束
-        this.loading = false
+  created () {
 
-        // 数据全部加载完成
-        if (this.list.length >= 40) {
-          this.finished = true
-        }
-      }, 500)
+  },
+
+  methods: {
+    //   上拉刷新，自动填满屏幕
+    async onLoad () {
+    // 获取评论
+      const response = await comments({
+        type: 'a', // 评论类型，a-对文章(article)的评论，c-对评论(comment)的回复
+        source: this.$route.params.article_ID, // 源id，文章id或评论id
+        offset: this.lastId, // 获取评论数据的偏移量，值为评论id，表示从此id的数据向后取，不传表示从第一页开始读取数据
+        limit: undefined // 获取的评论数据个数，不传表示采用后端服务设定的默认每页数据量
+      })
+      console.log(response)
+      this.comments = response.data.data.results
+      this.loading = false
+
+      const lastId = response.data.data.last
+      lastId ? this.lastId = lastId : this.finished = true
     }
   }
 }
@@ -86,5 +96,9 @@ export default {
 
 .van-list {
   margin-bottom: 45px;
+}
+
+.van-icon-like,.van-icon-like-o{
+    color: red
 }
 </style>
