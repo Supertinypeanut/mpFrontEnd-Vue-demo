@@ -1,7 +1,11 @@
 <template>
   <div>
+    <!-- 顶部栏 -->
+    <van-nav-bar title="我的"/>
+    <!-- 顶部栏 -->
+
     <!-- 未登录 -->
-    <div class="not-login">
+    <div class="not-login" v-if="!$store.state.userToken">
       <div class="circle" @click="$router.push({ name: 'login' })">
         <span>登录</span>
       </div>
@@ -9,7 +13,7 @@
     <!-- /未登录 -->
 
     <!-- 用户信息 -->
-    <van-cell-group class="user-info">
+    <van-cell-group class="user-info" v-else>
       <van-cell
         class="base-info"
         is-link :border="false"
@@ -61,11 +65,25 @@
 </template>
 
 <script>
+import { userInfo } from '@/api/user'
+
 export default {
   name: 'UserIndex',
   data () {
     return {
       user: {} // 用户信息对象
+    }
+  },
+
+  created () {
+    this.getUserInfo()
+  },
+
+  methods: {
+    async getUserInfo () {
+      const response = await userInfo()
+      console.log(response)
+      this.user = response.data.data
     }
   }
 }
