@@ -92,6 +92,7 @@
         </van-col>
       </van-row>
 
+      <van-divider>文章评论</van-divider>
       <!-- 评论组件 -->
       <article-comment></article-comment>
     </van-skeleton>
@@ -186,7 +187,6 @@ export default {
 
     // 不喜欢按钮
     async onToggleDisLikeArticle (targetID) {
-      console.log(8888)
       // 用户对文章的态度, -1: 无态度，0-不喜欢，1-点赞
       let attitude = this.article.attitude
 

@@ -24,7 +24,13 @@
           <p style="color: #363636;">{{comment.content}}</p>
           <p>
             <span style="margin-right: 10px;">{{comment.pubdate | relativeTime}}</span>
-            <van-button size="mini" type="default">回复</van-button>
+            <van-button
+              size="mini"
+              type="default"
+              @click="onReplyComment(comment)"
+            >
+              回复
+            </van-button>
           </p>
         </div>
         <van-icon
@@ -54,6 +60,17 @@
       </van-field>
     </van-cell-group>
      <!-- 发布评论 -->
+
+     <!-- 回复弹出层 -->
+    <van-popup
+      v-model="replyShow"
+      round
+      position="bottom"
+      :style="{ height: '90%' }"
+    >
+      <article-comment :comment="currentComment"></article-comment>
+    </van-popup>
+     <!-- 回复弹出层 -->
   </div>
 </template>
 
@@ -65,6 +82,8 @@ import {
   addComment
 } from '@/api/article-comment-request'
 
+import CommentReply from './comment-reply'
+
 export default {
   name: 'ArticleComment',
   props: {},
@@ -74,12 +93,14 @@ export default {
       loading: false, // 上拉加载更多的 loading
       finished: false, // 是否加载结束
       lastId: undefined, // 本次返回结果的最后一个评论id，作为请求下一页数据的offset参数，若本次无具体数据，则值为NULL
-      emitText: '' // 发布内容
+      emitText: '', // 发布内容
+      replyShow: false, // 弹出层显示
+      currentComment: null // 当前点击的评论
     }
   },
 
-  created () {
-
+  components: {
+    'article-comment': CommentReply
   },
 
   methods: {
@@ -139,6 +160,13 @@ export default {
       } catch (error) {
         this.$toast.fail('评论失败')
       }
+    },
+
+    // 回复按钮
+    onReplyComment (comment) {
+      // 开启弹层
+      this.replyShow = true
+      this.currentComment = comment
     }
   }
 }
