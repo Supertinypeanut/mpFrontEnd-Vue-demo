@@ -1,3 +1,7 @@
+/**
+ * 文章评论API
+*/
+
 // 引入自定义请求配置
 import request from '@/utils/request'
 
@@ -12,3 +16,7 @@ export const commentsLiking = target =>
 // 取消对评论或评论回复点赞
 export const cancelCommentsLiking = target =>
   request.delete(`/app/v1_0/comment/likings/${target}`)
+
+// 添加评论或评论回复
+export const addComment = data =>
+  request.post('/app/v1_0/comments', data)

@@ -35,20 +35,35 @@
       </van-cell>
     </van-list>
     <!-- 评论列表 -->
+
     <!-- 发布评论 -->
     <van-cell-group class="publish-wrap">
       <van-field
         clearable
         placeholder="请输入评论内容"
+        v-model="emitText"
       >
-        <van-button slot="button" size="mini" type="info">发布</van-button>
+        <van-button
+          slot="button"
+          size="mini"
+          type="info"
+          @click="onCommentEmit"
+        >
+          发布
+        </van-button>
       </van-field>
     </van-cell-group>
+     <!-- 发布评论 -->
   </div>
 </template>
 
 <script>
-import { comments, commentsLiking, cancelCommentsLiking } from '@/api/article-comment-request'
+import {
+  comments,
+  commentsLiking,
+  cancelCommentsLiking,
+  addComment
+} from '@/api/article-comment-request'
 
 export default {
   name: 'ArticleComment',
@@ -58,7 +73,8 @@ export default {
       comments: [], // 评论列表
       loading: false, // 上拉加载更多的 loading
       finished: false, // 是否加载结束
-      lastId: undefined // 本次返回结果的最后一个评论id，作为请求下一页数据的offset参数，若本次无具体数据，则值为NULL
+      lastId: undefined, // 本次返回结果的最后一个评论id，作为请求下一页数据的offset参数，若本次无具体数据，则值为NULL
+      emitText: '' // 发布内容
     }
   },
 
@@ -76,10 +92,12 @@ export default {
         offset: this.lastId, // 获取评论数据的偏移量，值为评论id，表示从此id的数据向后取，不传表示从第一页开始读取数据
         limit: undefined // 获取的评论数据个数，不传表示采用后端服务设定的默认每页数据量
       })
-      console.log(response)
+
+      // 将获取的评论列表添加到数组中
       this.comments.push(...response.data.data.results)
       this.loading = false
 
+      // 判断是否还有评论数据，lastId为下次请求偏移量
       const lastId = response.data.data.last_id
       lastId ? this.lastId = lastId : this.finished = true
     },
@@ -96,6 +114,31 @@ export default {
 
       // 更改状态数据
       comment.is_liking = !comment.is_liking
+    },
+
+    // 发布评论
+    async onCommentEmit () {
+      this.emitText = this.emitText.trim()
+      try {
+        if (this.emitText) {
+          //   发送添加评论请求
+          const response = await addComment({
+            target: this.$route.params.article_ID, // 评论的目标id（评论文章即为文章id，对评论进行回复则为评论id）
+            content: this.emitText, // 评论内容
+            art_id: undefined // 文章id，对评论内容发表回复时，需要传递此参数
+          })
+          // 将回调回来的数据填入comments中
+          this.comments.unshift(response.data.data.new_obj)
+
+          //   清空输入框内容
+          this.emitText = ''
+
+          // 提示用户
+          this.$toast.success('发表成功')
+        }
+      } catch (error) {
+        this.$toast.fail('评论失败')
+      }
     }
   }
 }
