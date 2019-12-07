@@ -30,6 +30,7 @@
         <van-icon
           slot="right-icon"
           :name="comment.is_liking ? 'like' : 'like-o'"
+          @click="onToggleCommentLiking(comment)"
         />
       </van-cell>
     </van-list>
@@ -47,7 +48,7 @@
 </template>
 
 <script>
-import { comments } from '@/api/article-comment-request'
+import { comments, commentsLiking, cancelCommentsLiking } from '@/api/article-comment-request'
 
 export default {
   name: 'ArticleComment',
@@ -76,11 +77,25 @@ export default {
         limit: undefined // 获取的评论数据个数，不传表示采用后端服务设定的默认每页数据量
       })
       console.log(response)
-      this.comments = response.data.data.results
+      this.comments.push(...response.data.data.results)
       this.loading = false
 
-      const lastId = response.data.data.last
+      const lastId = response.data.data.last_id
       lastId ? this.lastId = lastId : this.finished = true
+    },
+
+    // 对评论点赞
+    async onToggleCommentLiking (comment) {
+      // 获取点击评论id与当前是否
+      const targetID = comment.com_id.toString()
+
+      // 校验是否喜欢
+      comment.is_liking
+        ? await cancelCommentsLiking(targetID)
+        : await commentsLiking(targetID)
+
+      // 更改状态数据
+      comment.is_liking = !comment.is_liking
     }
   }
 }

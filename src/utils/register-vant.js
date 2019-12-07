@@ -23,7 +23,8 @@ import {
   Icon,
   Popup,
   Search,
-  Skeleton
+  Skeleton,
+  Dialog
 } from 'vant'
 Vue
   .use(NavBar)
@@ -52,3 +53,4 @@ Vue
   .use(Popup)
   .use(Search)
   .use(Skeleton)
+  .use(Dialog)

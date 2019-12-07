@@ -113,7 +113,6 @@ import {
   disLikeArticle,
   cancelDisLikeArticle
 } from '@/api/article-request'
-import { Dialog } from 'vant'
 import ArticleComment from './components/article-comment'
 
 export default {
@@ -146,7 +145,7 @@ export default {
         this.loading = false
       } catch (error) {
         // 使用对话框
-        Dialog.confirm({
+        this.$dialog.confirm({
           title: '加载失败',
           message: '是否需要重新加载'
         }).then(() => {
@@ -159,11 +158,11 @@ export default {
 
     // 关注按钮
     async onToggleFollow (targetID) {
-      let ifFollowed = this.article.is_followed
-      ifFollowed = !ifFollowed
+      let isFollowed = this.article.is_followed
+      isFollowed = !isFollowed
       // 对不同状态下发送不同的关注请求
-      ifFollowed ? await unFollowings(targetID) : await followings(targetID)
-      this.article.is_followed = ifFollowed
+      isFollowed ? await followings(targetID) : await unFollowings(targetID)
+      this.article.is_followed = isFollowed
     },
 
     // 点赞按钮
