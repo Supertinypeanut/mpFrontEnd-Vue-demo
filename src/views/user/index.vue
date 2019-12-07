@@ -6,7 +6,7 @@
 
     <!-- 未登录 -->
     <div class="not-login" v-if="!$store.state.userToken">
-      <div class="circle" @click="$router.push({ name: 'login' })">
+      <div class="circle" @click="$router.push({ name: 'Login' })">
         <span>登录</span>
       </div>
     </div>
@@ -49,7 +49,7 @@
     <van-cell-group>
       <van-grid clickable>
         <van-grid-item icon="star" text="我的收藏"/>
-        <van-grid-item icon="chat" text="我的评论"/>
+        <van-grid-item icon="comment" text="我的评论"/>
         <van-grid-item icon="like" text="我的点赞"/>
         <van-grid-item icon="browsing-history" text="浏览历史"/>
       </van-grid>
@@ -59,6 +59,7 @@
       <van-cell title="用户反馈" is-link />
       <van-cell title="小智同学" is-link @click="$router.push('/chat')" />
       <van-cell title="系统设置" is-link to="/settings" />
+      <van-cell title="退出登录" @click="onExit"/>
     </van-cell-group>
     <!-- /其它 -->
   </div>
@@ -80,10 +81,16 @@ export default {
   },
 
   methods: {
+    // 获取用户自己信息
     async getUserInfo () {
       const response = await userInfo()
-      console.log(response)
       this.user = response.data.data
+    },
+
+    // 退出登入
+    onExit () {
+      // 更新Vuex容器数据
+      this.$store.commit('updateUserToken', null)
     }
   }
 }
