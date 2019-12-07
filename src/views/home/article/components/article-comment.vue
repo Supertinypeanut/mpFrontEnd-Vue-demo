@@ -72,6 +72,7 @@
       <article-comment
         :comment="currentComment"
         @onCloseCommentReply="replyShow = false"
+        v-if="replyShow"
       />
     </van-popup>
      <!-- 回复弹出层 -->

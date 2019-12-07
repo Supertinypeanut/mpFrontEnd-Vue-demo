@@ -41,7 +41,7 @@
     >
       <van-cell
         v-for="comment in list"
-        :key="comment"
+        :key="comment.com_id.toString()"
       >
         <van-image
           slot="icon"
@@ -79,6 +79,7 @@ import {
 export default {
   name: 'CommentReply',
   props: {
+    //   当前评论
     comment: {
       type: Object,
       required: true
@@ -105,6 +106,7 @@ export default {
   created () {
     //  评论回复
     this.onLoad()
+    console.log(this.clearComponent)
   },
 
   methods: {
@@ -118,9 +120,8 @@ export default {
       })
 
       // 响应数据赋值
-      this.list = response.data.data.results
+      this.list.push(...response.data.data.results)
       this.reply_count = response.data.data.total_count
-      console.log(this.list, '000')
 
       //   关闭本次加载
       this.loading = false
