@@ -2,7 +2,7 @@
   <div class="article-comments">
     <!-- 导航栏 -->
     <van-nav-bar title="10条回复">
-      <van-icon slot="left" name="cross" />
+      <van-icon @click="$emit('onCloseCommentReply')" slot="left" name="cross" />
     </van-nav-bar>
     <!-- /导航栏 -->
 
@@ -14,17 +14,17 @@
         width="30"
         height="30"
         style="margin-right: 10px;"
-        src=""
+        src="http://toutiao.meiduo.site/Ft_PKcq3Hq8qic1ms4cOMSS-hUzt"
       />
-      <span style="color: #466b9d;" slot="title">作者昵称</span>
+      <span style="color: #466b9d;" slot="title">{{ comment.aut_name }}</span>
       <div slot="label">
-        <p style="color: #363636;">评论内容</p>
+        <p style="color: #363636;">{{ comment.content }}</p>
         <p>
-          <span style="margin-right: 10px;">10天前</span>
+          <span style="margin-right: 10px;">{{ comment.pubdate | relativeTime}}</span>
           <van-button
             size="mini"
             type="default"
-          >回复 10</van-button>
+          >回复 {{comment.reply_count}}</van-button>
         </p>
       </div>
       <van-icon slot="right-icon" />

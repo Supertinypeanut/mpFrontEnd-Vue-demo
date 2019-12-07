@@ -68,7 +68,11 @@
       position="bottom"
       :style="{ height: '90%' }"
     >
-      <article-comment :comment="currentComment"></article-comment>
+    <!-- 回复组件 -->
+      <article-comment
+        :comment="currentComment"
+        @onCloseCommentReply="replyShow = false"
+      />
     </van-popup>
      <!-- 回复弹出层 -->
   </div>
