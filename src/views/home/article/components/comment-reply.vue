@@ -1,7 +1,8 @@
 <template>
   <div class="article-comments">
     <!-- 导航栏 -->
-    <van-nav-bar title="10条回复">
+    <van-nav-bar >
+        <span slot="title">{{reply_count}}条回复</span>
       <van-icon @click="$emit('onCloseCommentReply')" slot="left" name="cross" />
     </van-nav-bar>
     <!-- /导航栏 -->
@@ -14,7 +15,7 @@
         width="30"
         height="30"
         style="margin-right: 10px;"
-        src="http://toutiao.meiduo.site/Ft_PKcq3Hq8qic1ms4cOMSS-hUzt"
+        :src="comment.aut_photo"
       />
       <span style="color: #466b9d;" slot="title">{{ comment.aut_name }}</span>
       <div slot="label">
@@ -32,10 +33,48 @@
     <!-- /当前评论 -->
 
     <van-cell title="全部评论" />
+    <van-list
+      v-model="loading"
+      :finished="finished"
+      finished-text="没有更多了"
+      @load="onLoad"
+    >
+      <van-cell
+        v-for="comment in list"
+        :key="comment"
+      >
+        <van-image
+          slot="icon"
+          round
+          width="30"
+          height="30"
+          style="margin-right: 10px;"
+          :src="comment.aut_photo"
+        />
+        <span style="color: #466b9d;" slot="title">{{ comment.aut_name }}</span>
+        <div slot="label">
+          <p style="color: #363636;">{{ comment.content }}</p>
+          <p>
+            <span style="margin-right: 10px;">{{ comment.pubdate | relativeTime}}</span>
+            <van-button
+              size="mini"
+              type="default"
+            >回复 {{comment.reply_count}}</van-button>
+          </p>
+        </div>
+        <van-icon slot="right-icon" />
+      </van-cell>
+    </van-list>
   </div>
 </template>
 
 <script>
+import {
+  comments
+//   commentsLiking,
+//   cancelCommentsLiking,
+//   addComment
+} from '@/api/article-comment-request'
 
 export default {
   name: 'CommentReply',
@@ -45,19 +84,50 @@ export default {
       required: true
     }
   },
+
   data () {
     return {
       list: [], // 评论列表
       loading: false, // 上拉加载更多的 loading
-      finished: false // 是否加载结束
+      finished: false, // 是否加载结束
+      last_id: null, // 获取评论数据的偏移量
+      reply_count: 0
     }
   },
+
+  computed: {
+    // 评论ID
+    commentID () {
+      return this.comment.com_id.toString()
+    }
+  },
+
   created () {
-    console.log(this.comment)
+    //  评论回复
+    this.onLoad()
   },
 
   methods: {
+    // 获取评论回复
     async onLoad () {
+      const response = await comments({
+        type: 'c',
+        source: this.commentID,
+        offset: this.last_id,
+        limit: undefined
+      })
+
+      // 响应数据赋值
+      this.list = response.data.data.results
+      this.reply_count = response.data.data.total_count
+      console.log(this.list, '000')
+
+      //   关闭本次加载
+      this.loading = false
+
+      // 判断是否还有数据，结束加载
+      const lastID = response.data.data.last_id
+      lastID ? this.last_id = lastID : this.finished = true
     }
   }
 }

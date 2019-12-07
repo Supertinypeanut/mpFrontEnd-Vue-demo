@@ -17,7 +17,7 @@
           width="30"
           height="30"
           style="margin-right: 10px;"
-          src="https://img.yzcdn.cn/vant/cat.jpeg"
+          :src="comment.aut_photo"
         />
         <span style="color: #466b9d;" slot="title">{{comment.aut_name}}</span>
         <div slot="label">
