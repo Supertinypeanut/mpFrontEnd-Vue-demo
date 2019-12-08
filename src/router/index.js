@@ -38,9 +38,16 @@ const routes = [{
   component: () => import('@/views/home/search/results')
 },
 {
+  // 文章详情页
   name: 'Article',
   path: `/article/:article_ID`,
   component: () => import('@/views/home/article')
+},
+{
+// 个人信息
+  name: 'UserProfile',
+  path: '/user/profile',
+  component: () => import('@/views/user/component/user-profile')
 }
 ]
 

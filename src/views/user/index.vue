@@ -17,7 +17,7 @@
       <van-cell
         class="base-info"
         is-link :border="false"
-        @click="$router.push('/user')"
+        @click="$router.push('/user/profile')"
       >
         <div slot="title">
           <img class="avatar" :src="user.photo" alt="">
@@ -85,12 +85,14 @@ export default {
     async getUserInfo () {
       const response = await userInfo()
       this.user = response.data.data
+      this.$store.commit('updateUserInfo', this.user)
     },
 
     // 退出登入
     onExit () {
       // 更新Vuex容器数据
       this.$store.commit('updateUserToken', null)
+      this.$store.commit('updateUserInfo', null)
     }
   }
 }

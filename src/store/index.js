@@ -10,7 +10,9 @@ export default new Vuex.Store({
     // 初始化token数据
     userToken: getItem('token') || {},
     // 搜索结果
-    searchResults: []
+    searchResults: [],
+    // 用户个人信息
+    userInfo: null
   },
   mutations: {
     // 更新token
@@ -23,6 +25,11 @@ export default new Vuex.Store({
     // 更新搜索结果
     keepSearchResults (state, searchResults) {
       state.searchResults = searchResults
+    },
+
+    // 更新用户信息
+    updateUserInfo (state, userInfo) {
+      state.userInfo = userInfo
     }
   },
   actions: {
