@@ -13,6 +13,6 @@ export const userInfo = () =>
 export const userInfoProfile = () =>
   request.get('/app/v1_0/user/profile')
 
-// 获取用户个人资料
-export const updataUserPhoto = () =>
-  request.get('/app/v1_0/user/photo')
+// 编辑用户照片资料
+export const updataUserPhoto = formData =>
+  request.patch('/app/v1_0/user/photo', formData)
