@@ -48,6 +48,12 @@ const routes = [{
   name: 'UserProfile',
   path: '/user/profile',
   component: () => import('@/views/user/component/user-profile')
+},
+{
+// 小智同学
+  name: 'UserProfile',
+  path: '/robotchat',
+  component: () => import('@/views/user/component/robot-chat')
 }
 ]
 
