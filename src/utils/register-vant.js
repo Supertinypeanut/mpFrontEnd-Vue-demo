@@ -25,7 +25,9 @@ import {
   Search,
   Skeleton,
   Dialog,
-  divider
+  Divider,
+  ActionSheet,
+  DatetimePicker
 } from 'vant'
 Vue
   .use(NavBar)
@@ -55,4 +57,6 @@ Vue
   .use(Search)
   .use(Skeleton)
   .use(Dialog)
-  .use(divider)
+  .use(Divider)
+  .use(ActionSheet)
+  .use(DatetimePicker)
