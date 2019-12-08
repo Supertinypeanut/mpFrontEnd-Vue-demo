@@ -72,6 +72,7 @@
     <van-popup
       v-model="isBirthdayShow"
       position="bottom"
+      round
       :style="{ height: '30%' }"
     >
       <van-datetime-picker
@@ -88,7 +89,8 @@
 <script>
 import {
   userInfoProfile,
-  updataUserPhoto
+  updataUserPhoto,
+  userFixInfoProfile
 } from '@/api/user'
 
 import dayjs from 'dayjs'
@@ -122,7 +124,6 @@ export default {
     // 获取用户个人资料
     async getUserProfile () {
       const response = await userInfoProfile()
-      console.log(response)
       this.user = response.data.data
     },
 
@@ -149,11 +150,17 @@ export default {
       try {
         if (this.file.files[0]) {
           const FD = new FormData()
-          FD.append('phone', this.file.files[0])
+          FD.append('photo', this.file.files[0])
           await updataUserPhoto(FD)
-          console.log(this.file.files[0])
-          this.$toast.success('保存成功')
         }
+
+        // 更新用户其他参数
+        await userFixInfoProfile({
+          name: this.user.name,
+          gender: this.user.gender,
+          birthday: this.user.birthday
+        })
+        this.$toast.success('保存成功')
       } catch (error) {
         this.$toast.fail('保存失败')
       }
