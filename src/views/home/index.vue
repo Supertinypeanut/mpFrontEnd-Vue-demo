@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <!-- 子路由出口 -->
-    <keep-alive>
+    <keep-alive exclude="UserIndex">
       <router-view />
     </keep-alive>
     <!-- 子路由出口 -->

@@ -56,7 +56,8 @@ export default {
         // 更新容器内token
         this.$store.commit('updateUserToken', res.data.data)
         // 跳转到主页
-        this.$router.push(this.$route.query.redirect)
+        const path = this.$route.query.redirect || '/'
+        this.$router.push(path)
       } catch (error) {
         this.$toast.fail('登入失败')
       }

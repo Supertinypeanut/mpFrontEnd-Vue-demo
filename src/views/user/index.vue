@@ -5,7 +5,7 @@
     <!-- 顶部栏 -->
 
     <!-- 未登录 -->
-    <div class="not-login" v-if="!$store.state.userInfo">
+    <div v-cloak class="not-login" v-if="!$store.state.userInfo">
       <div class="circle" @click="$router.push({ name: 'Login' })">
         <span>登录</span>
       </div>
