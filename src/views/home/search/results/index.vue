@@ -92,7 +92,6 @@ export default {
       })
       const articles = response.data.data.results
       this.articles.push(...articles)
-      console.log(articles)
       // 加载状态结束
       this.loading = false
 

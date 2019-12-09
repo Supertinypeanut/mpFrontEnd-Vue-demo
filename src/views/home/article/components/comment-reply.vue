@@ -71,9 +71,6 @@
 <script>
 import {
   comments
-//   commentsLiking,
-//   cancelCommentsLiking,
-//   addComment
 } from '@/api/article-comment-request'
 
 export default {
@@ -106,7 +103,6 @@ export default {
   created () {
     //  评论回复
     this.onLoad()
-    console.log(this.clearComponent)
   },
 
   methods: {

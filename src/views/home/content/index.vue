@@ -276,7 +276,6 @@ export default {
 
     // 添加用户频道
     onAddChannel (channel) {
-      console.log(channel)
       this.channels.push(channel)
       // 发送添加请求
       addChannel(channel)
