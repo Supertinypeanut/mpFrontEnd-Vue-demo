@@ -39,7 +39,7 @@ request.interceptors.response.use(
       // 判断是否有token
       const userToken = store.state.updateUserInfo
       if (!userToken || !userToken.refresh_token) {
-        router.push('/login')
+        redirectRouter()
         return
       }
 
@@ -63,12 +63,16 @@ request.interceptors.response.use(
         })
       } catch (error) {
         // 返回登入
-        router.push('/login')
+        redirectRouter()
       }
     }
 
     return Promise.reject(error)
   }
 )
+
+function redirectRouter () {
+  router.push(`/login?redirect=${router.currentRoute.fullPath}`)
+}
 
 export default request
