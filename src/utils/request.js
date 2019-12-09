@@ -1,6 +1,7 @@
 import axios from 'axios'
 import JSONBig from 'json-bigint'
 
+import router from '@/router'
 // 导入容器Vuex
 import store from '@/store'
 
@@ -28,5 +29,46 @@ request.defaults.transformResponse = [(response) => {
     return {}
   }
 }]
+
+// 处理token过期问题
+request.interceptors.response.use(
+  config => config,
+  error => {
+    // 判断错误码为401则刷新token
+    if (error.response.status === 401) {
+      // 判断是否有token
+      const userToken = store.state.updateUserInfo
+      if (!userToken || !userToken.refresh_token) {
+        router.push('/login')
+        return
+      }
+
+      // 捕获刷新失败
+      try {
+        axios({
+          method: 'PUT',
+          url: 'http://ttapi.research.itcast.cn/app/v1_0/authorizations',
+          headers: {
+            Authorization: `Bearer ${store.state.userToken.refresh_token}`
+          }
+        }).then(data => {
+          // 更新token
+          store.commit('updateUserToken', {
+            token: data.data.data.token,
+            refresh_token: store.state.userToken.refresh_token
+          })
+
+          // 返回新的请求
+          return request(error.config)
+        })
+      } catch (error) {
+        // 返回登入
+        router.push('/login')
+      }
+    }
+
+    return Promise.reject(error)
+  }
+)
 
 export default request
