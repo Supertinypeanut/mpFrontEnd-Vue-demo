@@ -1,5 +1,7 @@
 <template>
-  <router-view></router-view>
+  <keep-alive exclude="Article">
+    <router-view></router-view>
+  </keep-alive>
 </template>
 
 <script>

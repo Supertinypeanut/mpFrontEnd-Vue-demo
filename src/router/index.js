@@ -16,6 +16,16 @@ const routes = [{
     name: 'User',
     path: '/user',
     component: () => import('@/views/user')
+  },
+  {
+    name: 'Question',
+    path: '/question',
+    component: () => import('@/views/question')
+  },
+  {
+    name: 'Video',
+    path: '/video',
+    component: () => import('@/views/video')
   }]
 },
 {

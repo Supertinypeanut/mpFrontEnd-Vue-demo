@@ -23,7 +23,7 @@
           round
           width="30"
           height="30"
-          src="https://img.yzcdn.cn/vant/cat.jpeg"
+          :src="message.photo"
         />
         <div class="title">
           <span>{{ message.msg }}</span>
@@ -69,12 +69,18 @@ export default {
   watch: {
     messageQueue () {
       setItem('robotChat', this.messageQueue)
+
+      // 输入后消息列表置底
+      this.$nextTick(() => {
+        this.listNode.scrollTop = this.listNode.scrollHeight
+      })
     }
   },
 
   created () {
     this.socket = io('http://ttapi.research.itcast.cn')
     this.socket.on('message', data => {
+      data.photo = 'http://toutiao.meiduo.site/FkBUsGwtrHKjoF0NPLzeilckol1-'
       // 加入消息列表
       this.messageQueue.push(data)
     })
@@ -93,7 +99,8 @@ export default {
       }
       const data = {
         msg: this.message,
-        timestamp: Date.now()
+        timestamp: Date.now(),
+        photo: 'https://img.yzcdn.cn/vant/cat.jpeg'
       }
       // 发送消息
       this.socket.emit('message', data)
@@ -106,11 +113,6 @@ export default {
 
       // 清空输入框
       this.message = ''
-
-      // 输入后消息列表置底
-      this.$nextTick(() => {
-        this.listNode.scrollTop = this.listNode.scrollHeight
-      })
     }
   }
 }
