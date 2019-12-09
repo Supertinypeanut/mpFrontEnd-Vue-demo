@@ -26,7 +26,7 @@
           src="https://img.yzcdn.cn/vant/cat.jpeg"
         />
         <div class="title">
-          <span>{{ `hello${message.msg}` }}</span>
+          <span>{{ message.msg }}</span>
         </div>
       </div>
     </div>
@@ -53,14 +53,22 @@
 
 <script>
 import io from 'socket.io-client'
+import { setItem, getItem } from '@/utils/storage'
 
 export default {
   name: 'RobotChat',
   data () {
     return {
-      message: '',
-      socket: null,
-      messageQueue: []
+      message: '', // 输入框信息
+      socket: null, // Socket.io对象
+      messageQueue: getItem('robotChat') || [], // 消息数组
+      listNode: null
+    }
+  },
+
+  watch: {
+    messageQueue () {
+      setItem('robotChat', this.messageQueue)
     }
   },
 
@@ -73,7 +81,7 @@ export default {
   },
 
   mounted () {
-    window.list = this.$refs['message-list']
+    this.listNode = this.$refs['message-list']
   },
 
   methods: {
@@ -83,7 +91,6 @@ export default {
       if (!message) {
         return
       }
-
       const data = {
         msg: this.message,
         timestamp: Date.now()
@@ -93,8 +100,17 @@ export default {
 
       // 加入标记是否是自己发送
       data.isMe = true
+
       // 加入消息列表
       this.messageQueue.push(data)
+
+      // 清空输入框
+      this.message = ''
+
+      // 输入后消息列表置底
+      this.$nextTick(() => {
+        this.listNode.scrollTop = this.listNode.scrollHeight
+      })
     }
   }
 }
