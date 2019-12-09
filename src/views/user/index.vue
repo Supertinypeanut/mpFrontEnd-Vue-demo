@@ -5,7 +5,7 @@
     <!-- 顶部栏 -->
 
     <!-- 未登录 -->
-    <div class="not-login" v-if="!$store.state.userToken">
+    <div class="not-login" v-if="!$store.state.userInfo">
       <div class="circle" @click="$router.push({ name: 'Login' })">
         <span>登录</span>
       </div>
@@ -91,7 +91,7 @@ export default {
     // 退出登入
     onExit () {
       // 更新Vuex容器数据
-      this.$store.commit('updateUserToken', null)
+      this.$store.commit('updateUserToken', {})
       this.$store.commit('updateUserInfo', null)
     }
   }

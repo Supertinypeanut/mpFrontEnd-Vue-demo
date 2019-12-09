@@ -5,11 +5,10 @@ Vue.use(VueRouter)
 
 const routes = [{
   // 首页
-  name: 'Home',
   path: '/',
   component: () => import('@/views/home'),
   children: [{
-    name: 'First',
+    name: 'Home',
     path: '',
     component: () => import('@/views/home/content')
   },
@@ -51,7 +50,7 @@ const routes = [{
 },
 {
 // 小智同学
-  name: 'UserProfile',
+  name: 'RobotChat',
   path: '/robotchat',
   component: () => import('@/views/user/component/robot-chat')
 }

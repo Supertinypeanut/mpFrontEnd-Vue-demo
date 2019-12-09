@@ -13,9 +13,9 @@
     <div class="message-list" ref="message-list">
       <div
         class="message-item"
-        :class="{ reverse: item % 3 === 0 }"
-        v-for="item in 20"
-        :key="item"
+        :class="{ reverse: message.isMe }"
+        v-for="(message,index) in messageQueue"
+        :key="index"
       >
         <van-image
           class="avatar"
@@ -26,7 +26,7 @@
           src="https://img.yzcdn.cn/vant/cat.jpeg"
         />
         <div class="title">
-          <span>{{ `hello${item}` }}</span>
+          <span>{{ `hello${message.msg}` }}</span>
         </div>
       </div>
     </div>
@@ -39,7 +39,12 @@
         center
         clearable
       >
-        <van-button slot="button" size="small" type="primary">发送</van-button>
+        <van-button
+          slot="button"
+          size="small"
+          type="primary"
+          @click="onEmitMessage"
+        >发送</van-button>
       </van-field>
     </van-cell-group>
     <!-- /发送消息 -->
@@ -47,15 +52,50 @@
 </template>
 
 <script>
+import io from 'socket.io-client'
+
 export default {
+  name: 'RobotChat',
   data () {
     return {
-      message: ''
+      message: '',
+      socket: null,
+      messageQueue: []
     }
+  },
+
+  created () {
+    this.socket = io('http://ttapi.research.itcast.cn')
+    this.socket.on('message', data => {
+      // 加入消息列表
+      this.messageQueue.push(data)
+    })
   },
 
   mounted () {
     window.list = this.$refs['message-list']
+  },
+
+  methods: {
+    // 发送按钮
+    onEmitMessage () {
+      const message = this.message.trim()
+      if (!message) {
+        return
+      }
+
+      const data = {
+        msg: this.message,
+        timestamp: Date.now()
+      }
+      // 发送消息
+      this.socket.emit('message', data)
+
+      // 加入标记是否是自己发送
+      data.isMe = true
+      // 加入消息列表
+      this.messageQueue.push(data)
+    }
   }
 }
 </script>
@@ -81,8 +121,10 @@ export default {
         background: #fff;
         padding: 5px;
         border-radius: 6px;
+        margin-right: 30px;
       }
       .avatar {
+        width: 10%;
         margin-right: 5px;
       }
     }
