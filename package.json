@@ -15,6 +15,7 @@
     "fastclick": "^1.0.6",
     "json-bigint": "^0.3.0",
     "loadsh": "0.0.4",
+    "serialize-javascript": "^2.1.2",
     "socket.io-client": "^2.3.0",
     "vant": "^2.2.15",
     "vue": "^2.6.10",
