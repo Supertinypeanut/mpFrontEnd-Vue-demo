@@ -12,7 +12,7 @@
       </van-button>
     </van-nav-bar>
     <!-- tab标签页 -->
-    <van-tabs v-model="active" animated>
+    <van-tabs v-model="active" animated swipeable>
       <!-- 标签页标签管理按钮 -->
       <div slot="nav-right" class="nav-right">
         <van-icon name="wap-nav" @click='isManage = !isManage' />

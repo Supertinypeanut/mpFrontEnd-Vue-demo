@@ -5,7 +5,7 @@
       fixed
       left-text="返回"
       left-arrow
-      @click-left="$router.back()"
+      @click-left="$router.push('/')"
     >
      <van-icon slot="right" size="26" name="ellipsis" />
     </van-nav-bar>
