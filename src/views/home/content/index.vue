@@ -283,6 +283,7 @@ export default {
 
     // 非编辑状态下点击我的频道
     onNotEditClick (index) {
+      if (this.editChannels) return
       this.active = index
       this.isManage = false
     }

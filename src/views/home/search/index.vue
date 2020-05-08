@@ -9,7 +9,7 @@
         shape="round"
         @focus="historiesShow = false"
         @search="onSearch"
-        @cancel="$router.back()"
+        @cancel="$router.push('/')"
         @input="onSuggestion"
         @clear="historiesShow = true"
       />
@@ -50,7 +50,7 @@
           name="close"
           v-show="isDeleteStatus"
           slot="right-icon"
-          @click="historyMark.splice(index,1)"
+          @click="deleteHistory(index)"
           >
         </van-icon>
       </van-cell>
@@ -68,6 +68,7 @@ export default {
   name: 'Search',
   data () {
     return {
+      isDelete: false,
       searchText: '', // 输入内容
       historiesShow: true, // 历史记录是否显示
       suggestion: [], // 下拉联想数组
@@ -114,6 +115,7 @@ export default {
 
     // 关键词搜索,历史记录存储
     async onSearch (searchText) {
+      if (this.isDelete) return
       //   当前历史记录数组
       const historyMark = this.historyMark
 
@@ -141,7 +143,15 @@ export default {
       }
       const response = await getHistories()
       this.historyMark = response.data.data.keywords
+    },
+    // 删除历史记录
+    deleteHistory (index) {
+      this.historyMark.splice(index, 1)
+      this.isDelete = true
     }
+  },
+  updated () {
+    this.isDelete = false
   }
 }
 </script>
