@@ -152,7 +152,8 @@ export default {
         }).then(() => {
           this.loadData()
         }).catch(() => {
-          this.$router.back()
+          // this.$router.back()
+          this.$router.push(this.$route.fullPath)
         })
       }
     },

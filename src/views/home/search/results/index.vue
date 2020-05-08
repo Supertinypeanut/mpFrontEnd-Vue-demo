@@ -6,7 +6,7 @@
       :title="title"
       left-text="返回"
       left-arrow
-      @click-left="$router.back()"
+      @click-left="$router.push('/search')"
     />
     <!-- 数据列表 -->
     <van-list

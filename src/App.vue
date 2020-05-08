@@ -1,5 +1,5 @@
 <template>
-  <keep-alive exclude="Article">
+  <keep-alive exclude="Article,Search">
     <router-view></router-view>
   </keep-alive>
 </template>
