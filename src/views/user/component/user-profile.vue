@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="profile">
     <van-nav-bar
       title="个人信息"
       left-arrow
@@ -52,6 +52,7 @@
     >
       <van-field
         placeholder="请输入用户名"
+        maxlength="7"
         :value="user.name"
         @input="onUserNameInput"
       />

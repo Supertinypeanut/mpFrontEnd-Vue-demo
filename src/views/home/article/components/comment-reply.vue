@@ -167,13 +167,18 @@ export default {
       const targetID = comment.com_id.toString()
 
       // 校验是否喜欢
-      comment.is_liking
+      const { data } = comment.is_liking
         ? await cancelCommentsLiking(targetID)
         : await commentsLiking(targetID)
 
-      // 更改状态数据
-      comment.is_liking = !comment.is_liking
-      console.log(comment.is_liking)
+      if (data.message === 'OK') {
+        // 更改状态数据
+        comment.is_liking = !comment.is_liking
+        this.$forceUpdate()
+        return
+      }
+
+      this.$toast.fail(comment.is_liking ? '取消点赞失败' : '点赞失败')
     }
   }
 }

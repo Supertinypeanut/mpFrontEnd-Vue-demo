@@ -17,7 +17,7 @@
       <van-cell
         class="base-info"
         is-link :border="false"
-        @click="$router.push('/user/profile')"
+        @click="goProfile"
       >
         <div slot="title">
           <img class="avatar" :src="user.photo" alt="">
@@ -81,6 +81,9 @@ export default {
   },
 
   methods: {
+    goProfile () {
+      this.$router.push('/user/profile')
+    },
     // 获取用户自己信息
     async getUserInfo () {
       const response = await userInfo()

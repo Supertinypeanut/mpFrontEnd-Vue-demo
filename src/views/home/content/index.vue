@@ -316,6 +316,11 @@ export default {
   padding-bottom: 40px;
 }
 
+//
+/deep/.van-image__img {
+  height: 100px;
+}
+
 // tag标签样式
 /deep/ .van-row{
   align-items: center;
