@@ -91,7 +91,8 @@
 import {
   userInfoProfile,
   updataUserPhoto,
-  userFixInfoProfile
+  userFixInfoProfile,
+  userInfo
 } from '@/api/user'
 
 import dayjs from 'dayjs'
@@ -162,6 +163,10 @@ export default {
           birthday: this.user.birthday
         })
         this.$toast.success('保存成功')
+
+        // 更新人员信息
+        const response = await userInfo()
+        this.$store.commit('updateUserInfo', response.data.data)
       } catch (error) {
         this.$toast.fail('保存失败')
       }

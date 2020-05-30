@@ -27,9 +27,11 @@
           height="1rem"
           round
           fit="fill"
-          src="https://img.yzcdn.cn/vant/cat.jpeg"
+          :src="article.aut_photo"
         />
         <van-button
+          :class="{isMe: 'buttonDisabled'}"
+          :disabled="isMe"
           slot="right-icon"
           size="small"
           round
@@ -134,6 +136,12 @@ export default {
   components: {
     ArticleComment
   },
+  computed: {
+    isMe () {
+      const currentUser = this.$store.state.userInfo
+      return currentUser.id === this.article.aut_id
+    }
+  },
   methods: {
     // 获取文章详情与评论信息
     async loadData () {
@@ -163,8 +171,10 @@ export default {
       let isFollowed = this.article.is_followed
       isFollowed = !isFollowed
       // 对不同状态下发送不同的关注请求
-      isFollowed ? await followings(targetID) : await unFollowings(targetID)
-      this.article.is_followed = isFollowed
+      const { data } = isFollowed ? await followings(targetID) : await unFollowings(targetID)
+      if (data.data) {
+        this.article.is_followed = isFollowed
+      }
     },
 
     // 点赞按钮
@@ -209,6 +219,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.isMe {
+  color: #777;
+  border-color: #777;
+}
 .title{
   padding-top: 60px;
   font-weight: bolder;

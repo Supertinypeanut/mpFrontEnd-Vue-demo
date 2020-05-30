@@ -5,7 +5,7 @@
     <!-- 顶部栏 -->
 
     <!-- 未登录 -->
-    <div v-cloak class="not-login" v-if="!$store.state.userInfo">
+    <div v-cloak class="not-login" v-if="!isLogin">
       <div class="circle" @click="$router.push({ name: 'Login' })">
         <span>登录</span>
       </div>
@@ -59,25 +59,33 @@
       <van-cell title="用户反馈" is-link />
       <van-cell title="小智同学" is-link @click="$router.push('/robotchat')" />
       <van-cell title="系统设置" is-link to="/settings" />
-      <van-cell title="退出登录" @click="onExit"/>
+      <van-cell :title="isLogin?'退出登录' : '登录'" @click="onExit"/>
     </van-cell-group>
     <!-- /其它 -->
   </div>
 </template>
 
 <script>
-import { userInfo } from '@/api/user'
+// import { userInfo } from '@/api/user'
 
 export default {
   name: 'UserIndex',
   data () {
     return {
-      user: {} // 用户信息对象
+      // user: {} // 用户信息对象
     }
   },
 
   created () {
-    this.getUserInfo()
+    // this.getUserInfo()
+  },
+  computed: {
+    isLogin () {
+      return !!this.$store.state.userInfo
+    },
+    user () {
+      return this.$store.state.userInfo
+    }
   },
 
   methods: {
@@ -85,17 +93,28 @@ export default {
       this.$router.push('/user/profile')
     },
     // 获取用户自己信息
-    async getUserInfo () {
-      const response = await userInfo()
-      this.user = response.data.data
-      this.$store.commit('updateUserInfo', this.user)
-    },
+    // async getUserInfo () {
+    //   const response = await userInfo()
+    //   this.user = response.data.data
+    //   this.$store.commit('updateUserInfo', this.user)
+    // },
 
     // 退出登入
     onExit () {
-      // 更新Vuex容器数据
-      this.$store.commit('updateUserToken', {})
-      this.$store.commit('updateUserInfo', null)
+      if (this.isLogin) {
+        this.$dialog.confirm({
+          title: '退出登录',
+          message: '是否退出当前登录'
+        }).then(() => {
+        // 更新Vuex容器数据
+          this.$store.commit('updateUserToken', {})
+          this.$store.commit('updateUserInfo', null)
+        }).catch(() => {
+        })
+
+        return
+      }
+      this.$router.push('/login')
     }
   }
 }
