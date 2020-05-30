@@ -294,7 +294,7 @@ export default {
 <style scoped lang="less">
 // 搜索按钮
 .van-button{
-  width: 100%;
+  width: 200px;
   background-color: #59abfe;
 }
 

@@ -27,7 +27,8 @@ import {
   Dialog,
   Divider,
   ActionSheet,
-  DatetimePicker
+  DatetimePicker,
+  Form
 } from 'vant'
 Vue
   .use(NavBar)
@@ -60,3 +61,4 @@ Vue
   .use(Divider)
   .use(ActionSheet)
   .use(DatetimePicker)
+  .use(Form)
