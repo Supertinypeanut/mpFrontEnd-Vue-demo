@@ -13,7 +13,7 @@
     "core-js": "^3.4.3",
     "dayjs": "^1.8.17",
     "fastclick": "^1.0.6",
-    "json-bigint": "^0.3.0",
+    "json-bigint": "^1.0.0",
     "loadsh": "0.0.4",
     "serialize-javascript": "^2.1.2",
     "socket.io-client": "^2.3.0",
